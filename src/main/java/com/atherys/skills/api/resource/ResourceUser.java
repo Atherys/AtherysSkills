@@ -24,7 +24,7 @@ public interface ResourceUser {
      *
      * @param amount
      */
-    default void drainResource(double amount) {
+    default void removeResource(double amount) {
         getResource().drain(amount);
     }
 
@@ -33,7 +33,7 @@ public interface ResourceUser {
      *
      * @param amount
      */
-    default void fillResource(double amount) {
+    default void addResource(double amount) {
         getResource().fill(amount);
     }
 

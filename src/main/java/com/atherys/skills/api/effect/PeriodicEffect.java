@@ -5,6 +5,7 @@ public abstract class PeriodicEffect extends AbstractEffect {
     private long lastApplied;
 
     private long timeBetween;
+
     private int ticksRemaining;
 
     protected PeriodicEffect(String id, String name, long timeBetweenTicks, int ticks) {

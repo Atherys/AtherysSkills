@@ -27,7 +27,7 @@ public class TemporaryPotionEffect extends TemporaryEffect {
 
     @Override
     protected boolean apply(ApplyableCarrier<?> character) {
-        return character.asLiving()
+        return character.getLiving()
                 .map(living -> LivingUtils.applyPotionEffect(living, effect))
                 .map(DataTransactionResult::isSuccessful)
                 .orElse(false);
@@ -35,7 +35,7 @@ public class TemporaryPotionEffect extends TemporaryEffect {
 
     @Override
     protected boolean remove(ApplyableCarrier<?> character) {
-        return character.asLiving()
+        return character.getLiving()
                 .map(living -> LivingUtils.removePotionEffect(living, effect))
                 .map(DataTransactionResult::isSuccessful)
                 .orElse(false);

@@ -1,8 +1,6 @@
 package com.atherys.skills.api.effect;
 
 import org.spongepowered.api.CatalogType;
-import org.spongepowered.api.entity.living.Living;
-
 /**
  * An object which can be applied to a character and cause various temporary effects upon their game experience.
  * Applyables are not persisted across server restarts.

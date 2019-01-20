@@ -1,6 +1,10 @@
-package com.atherys.skills.api.skill;
+package com.atherys.skills.api.property;
+
+import com.atherys.skills.api.skill.Castable;
+import com.atherys.skills.api.skill.MouseButtonCombo;
 
 import javax.annotation.Nullable;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Optional;
 
@@ -8,12 +12,16 @@ import java.util.Optional;
  * An interface representing all properties a Castable may need to use during its existence.
  * All CastableProperties must be deep-copyable.
  */
-public interface CastableProperties {
+public interface CastableProperties<T extends Castable<T,P>, P extends CastableProperties<T,P>> extends Serializable {
 
     String PERMISSION = "permission";
+
     String COOLDOWN = "cooldown";
+
     String COST = "cost";
+
     String DESCRIPTION = "description";
+
     String MOUSE_COMBO = "mouse-combo";
 
     String getPermission();
@@ -26,9 +34,15 @@ public interface CastableProperties {
 
     String getDescription();
 
-    Map<String, Object> getMeta();
+    Map<String, Object> getProperties();
 
-    CastableProperties copy();
+    default boolean hasProperty(String key) {
+        return getProperty(key) == null;
+    }
+
+    void addProperty(String key, Object value);
+
+    P copy();
 
     /**
      * Mutates this instance by inheriting the properties of the provided object.
@@ -37,7 +51,7 @@ public interface CastableProperties {
      * @param parent The parent to copy properties from
      * @return The new, mutated instance
      */
-    CastableProperties inheritFrom(CastableProperties parent);
+    P inheritFrom(P parent);
 
     /**
      * Retrieves the value behind the provided key
@@ -46,26 +60,21 @@ public interface CastableProperties {
      * @return The value, or null if not found
      */
     @Nullable
-    default Object get(String key) {
-        if (key.equals(PERMISSION)) return getPermission();
-        if (key.equals(COST)) return getResourceCost();
-        if (key.equals(MOUSE_COMBO)) return getCombo();
-        if (key.equals(COOLDOWN)) return getCooldown();
-        if (key.equals(DESCRIPTION)) return getDescription();
-        return getMeta().get(key);
-    }
-
-    /**
-     * Retrieves the value behind the provided key, or a provided default value
-     *
-     * @param key          The key to look for
-     * @param defaultValue The default value to return
-     * @return The retrieved value, or the default, if the value behind the key is null OR not the same class as the provided default value.
-     */
-    @Nullable
-    default Object getOrDefault(String key, Object defaultValue) {
-        Object result = get(key);
-        return result == null || !result.getClass().equals(defaultValue.getClass()) ? defaultValue : result;
+    default Object getProperty(String key) {
+        switch(key) {
+            case PERMISSION:
+                return getPermission();
+            case COST:
+                return getResourceCost();
+            case MOUSE_COMBO:
+                return getCombo();
+            case COOLDOWN:
+                return getCooldown();
+            case DESCRIPTION:
+                return getDescription();
+            default:
+                return getProperties().get(key);
+        }
     }
 
     /**
@@ -75,11 +84,18 @@ public interface CastableProperties {
      * @param clazz The class the result should be interpreted as
      * @return An optional containing the result, or empty, if the resulting value is null OR not the same class as required
      */
-    default <T> Optional<T> get(String key, Class<T> clazz) {
-        Object object = get(key);
-        if (object == null) return Optional.empty();
-        if (clazz.isAssignableFrom(object.getClass())) return Optional.of((T) object);
-        else return Optional.empty();
+    default <O> Optional<O> get(String key, Class<O> clazz) {
+        Object object = getProperty(key);
+
+        if (object == null) {
+            return Optional.empty();
+        }
+
+        if (clazz.isAssignableFrom(object.getClass())) {
+            return Optional.of((O) object);
+        } else {
+            return Optional.empty();
+        }
     }
 
     /**
@@ -87,14 +103,20 @@ public interface CastableProperties {
      *
      * @param key          The key to look for
      * @param defaultValue The default value
-     * @param clazz        The class the result should be interpreted as
-     * @return An optional containing the result, or the default value, if none is found OR is not the same class
+     * @return The result, or the default value
      */
-    default <T> Optional<T> getOrDefault(String key, T defaultValue, Class<T> clazz) {
-        Object object = get(key);
-        if (object == null) return Optional.of(defaultValue);
-        if (clazz.isAssignableFrom(object.getClass())) return Optional.of((T) object);
-        else return Optional.of(defaultValue);
+    default <O> O getOrDefault(String key, O defaultValue) {
+        Object object = getProperty(key);
+
+        if (object == null) {
+            return defaultValue;
+        }
+
+        if (defaultValue.getClass().isAssignableFrom(object.getClass())) {
+            return (O) object;
+        } else {
+            return defaultValue;
+        }
     }
 
     default Optional<String> getString(String key) {

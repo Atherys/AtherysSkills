@@ -1,6 +1,5 @@
 package com.atherys.skills.api.skill;
 
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
 public class CastResult {
@@ -21,14 +20,5 @@ public class CastResult {
 
     public static CastResult success() {
         return new CastResult(Text.EMPTY);
-    }
-
-    void feedback(CastableCarrier user) {
-        user.asLiving().ifPresent(living -> {
-            if (living instanceof Player && !message.isEmpty()) {
-                // TODO
-                //CombatMessage.prefix((Player) living, message);
-            }
-        });
     }
 }
