@@ -1,5 +1,6 @@
 package com.atherys.skills.effect;
 
+import com.atherys.core.db.SpongeIdentifiable;
 import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.effect.ApplyableCarrier;
 import org.spongepowered.api.entity.living.Living;
@@ -10,7 +11,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-public class EntityEffectCarrier implements ApplyableCarrier<Living> {
+public class EntityEffectCarrier implements SpongeIdentifiable, ApplyableCarrier<Living> {
 
     private Living cachedLiving;
 

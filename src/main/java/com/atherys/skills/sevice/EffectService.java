@@ -6,14 +6,13 @@ import com.atherys.skills.api.effect.ApplyableCarrier;
 import com.atherys.skills.effect.EntityEffectCarrier;
 import com.google.inject.Singleton;
 import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.registry.CatalogRegistryModule;
 import org.spongepowered.api.scheduler.Task;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Singleton
-public class EffectService {
+public class EffectService implements CatalogRegistryModule<Applyable> {
 
     private Task task;
 
@@ -42,7 +41,7 @@ public class EffectService {
         }
     }
 
-    private ApplyableCarrier<?> getOrCreateCarrier(Living entity) {
+    public ApplyableCarrier<?> getOrCreateCarrier(Living entity) {
         if ( cache.containsKey(entity.getUniqueId()) ) {
             return cache.get(entity.getUniqueId());
         } else {
@@ -69,5 +68,27 @@ public class EffectService {
 
     public boolean removeEffect(Living entity, Applyable applyable) {
         return getOrCreateCarrier(entity).removeEffect(applyable, System.currentTimeMillis());
+    }
+
+    public boolean removeEffect(Living entity, String effectId) {
+        return getOrCreateCarrier(entity).removeEffect(effectId, System.currentTimeMillis());
+    }
+
+    public Optional<Applyable> getNamedEffect(String id) {
+        return Optional.ofNullable(namedEffects.get(id));
+    }
+
+    public void setNamedEffect(String id, Applyable effect) {
+        namedEffects.put(id, effect);
+    }
+
+    @Override
+    public Optional<Applyable> getById(String id) {
+        return getNamedEffect(id);
+    }
+
+    @Override
+    public Collection<Applyable> getAll() {
+        return namedEffects.values();
     }
 }

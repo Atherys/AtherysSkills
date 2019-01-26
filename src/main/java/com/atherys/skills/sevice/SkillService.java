@@ -5,9 +5,17 @@ import com.atherys.skills.api.skill.CastResult;
 import com.atherys.skills.api.skill.Castable;
 import com.google.inject.Singleton;
 import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.registry.CatalogRegistryModule;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Singleton
-public class SkillService {
+public class SkillService implements CatalogRegistryModule<Castable> {
+
+    private Map<String,Castable> castables = new HashMap<>();
 
     /**
      * Casts a castable with the properties stored within this carrier
@@ -18,8 +26,17 @@ public class SkillService {
      * @param args      arguments
      * @return a {@link CastResult}
      */
-    CastResult castSkill(Living user, Castable castable, long timestamp, String... args) throws CastException {
-        return CastResult.empty();
+    public CastResult castSkill(Living user, Castable castable, long timestamp, String... args) throws CastException {
+        return castable.cast(user, timestamp, args);
     }
 
+    @Override
+    public Optional<Castable> getById(String id) {
+        return Optional.ofNullable(castables.get(id));
+    }
+
+    @Override
+    public Collection<Castable> getAll() {
+        return castables.values();
+    }
 }
