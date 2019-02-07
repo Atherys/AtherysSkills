@@ -4,6 +4,8 @@ import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.effect.ApplyableCarrier;
 import com.atherys.skills.effect.EntityEffectCarrier;
+import com.atherys.skills.registry.EffectRegistry;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.registry.CatalogRegistryModule;
@@ -12,11 +14,12 @@ import org.spongepowered.api.scheduler.Task;
 import java.util.*;
 
 @Singleton
-public class EffectService implements CatalogRegistryModule<Applyable> {
+public class EffectService {
+
+    @Inject
+    EffectRegistry effectRegistry;
 
     private Task task;
-
-    private Map<String,Applyable> namedEffects = new HashMap<>();
 
     private Map<UUID,ApplyableCarrier> cache = new HashMap<>();
 
@@ -75,20 +78,11 @@ public class EffectService implements CatalogRegistryModule<Applyable> {
     }
 
     public Optional<Applyable> getNamedEffect(String id) {
-        return Optional.ofNullable(namedEffects.get(id));
+        return effectRegistry.getById(id);
     }
 
-    public void setNamedEffect(String id, Applyable effect) {
-        namedEffects.put(id, effect);
+    public void registerNamedEffect(Applyable effect) {
+        effectRegistry.register(effect);
     }
 
-    @Override
-    public Optional<Applyable> getById(String id) {
-        return getNamedEffect(id);
-    }
-
-    @Override
-    public Collection<Applyable> getAll() {
-        return namedEffects.values();
-    }
 }

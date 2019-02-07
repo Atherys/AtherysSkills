@@ -19,7 +19,7 @@ public class SkillFacade {
     SkillService skillService;
 
     public void playerCastSkill(Player caster, String skillId, String... arguments) throws CastException {
-        Optional<Castable> castable = skillService.getById(skillId);
+        Optional<Castable> castable = skillService.getSkillById(skillId);
 
         if ( !castable.isPresent() ) {
             throw CastErrors.noSuchSkill();

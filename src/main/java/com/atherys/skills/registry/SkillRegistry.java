@@ -1,5 +1,6 @@
 package com.atherys.skills.registry;
 
+import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.skill.Castable;
 import com.atherys.skills.event.SkillRegistrationEvent;
 import com.google.inject.Singleton;
@@ -28,6 +29,7 @@ public class SkillRegistry implements CatalogRegistryModule<Castable> {
     }
 
     public void register(Castable castable) {
+        Sponge.getEventManager().registerListeners(AtherysSkills.getInstance(), castable);
         registry.put(castable.getId(), castable);
     }
 

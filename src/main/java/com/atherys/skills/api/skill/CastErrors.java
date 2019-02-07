@@ -76,4 +76,7 @@ public final class CastErrors {
         return exceptionOf(TextColors.RED, "You lack the permission required to use the skill ", castable.getName());
     }
 
+    public static CastException invalidArguments() {
+        return exceptionOf(TextColors.RED, "Invalid arguments were supplied to the skill.");
+    }
 }
