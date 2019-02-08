@@ -5,6 +5,7 @@ import com.atherys.skills.api.skill.MouseButtonCombo;
 import com.atherys.skills.api.util.PropertyUtils;
 import com.google.gson.annotations.Expose;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractSkillProperties<T extends Castable<T,P>, P extends CastableProperties<T,P>> implements CastableProperties<T,P> {
@@ -25,7 +26,7 @@ public abstract class AbstractSkillProperties<T extends Castable<T,P>, P extends
     private String description;
 
     @Expose
-    private Map<String,Object> properties;
+    private Map<String,Object> properties = new HashMap<>();
 
     protected AbstractSkillProperties(String permission, double resCost, long cooldownMillis, MouseButtonCombo combo, String description) {
         this.permission = permission;

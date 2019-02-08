@@ -1,42 +1,38 @@
 package com.atherys.skills.sevice;
 
-import com.atherys.skills.api.resource.Resource;
+import com.atherys.skills.api.resource.ResourceUser;
+import com.atherys.skills.api.skill.Castable;
+import com.atherys.skills.registry.ResourceRegistry;
 import com.atherys.skills.resource.ActionPoints;
-import com.atherys.skills.resource.Mana;
-import com.atherys.skills.resource.Rage;
+import com.atherys.skills.resource.EntityResourceUser;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.spongepowered.api.registry.CatalogRegistryModule;
+import org.spongepowered.api.entity.living.Living;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
+import java.util.UUID;
 
 @Singleton
-public class ResourceService implements CatalogRegistryModule<Resource> {
+public class ResourceService {
 
-    private Map<String,Resource> resources = new HashMap<>();
+    @Inject
+    ResourceRegistry resourceRegistry;
 
-    @Override
-    public void registerDefaults() {
-        resources.put(ActionPoints.ID, new ActionPoints(0.0));
-        resources.put(Mana.ID, new Mana(0.0));
-        resources.put(Rage.ID, new Rage(0.0));
-    }
+    private Map<UUID, ResourceUser> resourceUsers = new HashMap<>();
 
-    @Override
-    public Optional<Resource> getById(String id) {
-        Resource resource = resources.get(id);
+    public ResourceUser getOrCreateUser(Living user) {
+        ResourceUser resourceUser = resourceUsers.get(user.getUniqueId());
 
-        if ( resource != null ) {
-            return Optional.of(resource.copy());
-        } else {
-            return Optional.empty();
+        if (resourceUser == null) {
+            resourceUser = new EntityResourceUser(user, new ActionPoints(0.0));
+            resourceUsers.put(user.getUniqueId(), resourceUser);
         }
+
+        return resourceUser;
     }
 
-    @Override
-    public Collection<Resource> getAll() {
-        return resources.values();
+    public void withdrawResource(Living user, Castable castable) {
+
     }
 }
