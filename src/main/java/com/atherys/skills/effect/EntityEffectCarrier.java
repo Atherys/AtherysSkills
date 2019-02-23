@@ -22,11 +22,6 @@ public class EntityEffectCarrier implements SpongeIdentifiable, ApplyableCarrier
     }
 
     @Override
-    public Set<Applyable> getEffects() {
-        return effects;
-    }
-
-    @Override
     public Optional<Living> getLiving() {
         if ( cachedLiving == null ) {
             return Optional.empty();
@@ -37,6 +32,31 @@ public class EntityEffectCarrier implements SpongeIdentifiable, ApplyableCarrier
         }
 
         return Optional.of(cachedLiving);
+    }
+
+    @Override
+    public void addEffect(Applyable applyable) {
+        effects.add(applyable);
+    }
+
+    @Override
+    public void removeEffect(Applyable applyable) {
+        effects.remove(applyable);
+    }
+
+    @Override
+    public boolean hasEffect(Applyable applyable) {
+        return effects.contains(applyable);
+    }
+
+    @Override
+    public boolean hasEffects() {
+        return !effects.isEmpty();
+    }
+
+    @Override
+    public Set<Applyable> getEffects() {
+        return effects;
     }
 
     @Nonnull

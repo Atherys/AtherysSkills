@@ -15,6 +15,11 @@ public abstract class TargetedSkill<T extends Castable<T,P>,P extends CastablePr
     public CastResult cast(Living user, P properties, long timestamp, String... args) throws CastException {
         for (EntityUniverse.EntityHit hit : user.getWorld().getIntersectingEntities(user, properties.getOrDefault("range", 100.0))) {
             Entity entity = hit.getEntity();
+
+            if (entity.equals(user)) {
+                continue;
+            }
+
             if ( entity instanceof Living ) {
                 return cast(user, (Living) entity, properties, timestamp, args);
             }

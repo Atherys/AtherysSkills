@@ -15,6 +15,9 @@ public class ResourceRegistry implements CatalogRegistryModule<Resource> {
 
     private Map<String, Resource> resources = new HashMap<>();
 
+    public ResourceRegistry() {
+    }
+
     @Override
     public void registerDefaults() {
         resources.put(ActionPoints.ID, new ActionPoints(0.0));

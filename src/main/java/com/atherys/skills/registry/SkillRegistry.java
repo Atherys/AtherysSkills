@@ -17,8 +17,7 @@ public class SkillRegistry implements CatalogRegistryModule<Castable> {
 
     private Map<String, Castable> registry = new HashMap<>();
 
-    @Override
-    public void registerDefaults() {
+    public SkillRegistry() {
         SkillRegistrationEvent event = new SkillRegistrationEvent(this);
         Sponge.getEventManager().post(event);
     }

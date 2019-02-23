@@ -37,7 +37,7 @@ public abstract class PeriodicEffect extends AbstractEffect {
         return remove(character);
     }
 
-    protected abstract <T extends ApplyableCarrier> boolean apply(T character);
+    protected abstract boolean apply(ApplyableCarrier<?> character);
 
-    protected abstract <T extends ApplyableCarrier> boolean remove(T character);
+    protected abstract boolean remove(ApplyableCarrier<?> character);
 }

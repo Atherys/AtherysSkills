@@ -7,6 +7,7 @@ import com.atherys.skills.effect.EntityEffectCarrier;
 import com.atherys.skills.registry.EffectRegistry;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.registry.CatalogRegistryModule;
 import org.spongepowered.api.scheduler.Task;
@@ -16,14 +17,11 @@ import java.util.*;
 @Singleton
 public class EffectService {
 
-    @Inject
-    EffectRegistry effectRegistry;
-
     private Task task;
 
-    private Map<UUID,ApplyableCarrier> cache = new HashMap<>();
+    private Map<UUID, ApplyableCarrier> cache = new HashMap<>();
 
-    private EffectService() {
+    EffectService() {
         task = Task.builder()
                 .name("effect-service-task")
                 .intervalTicks(1)
@@ -35,17 +33,17 @@ public class EffectService {
         long timestamp = System.currentTimeMillis();
 
         for (Map.Entry<UUID, ApplyableCarrier> entry : cache.entrySet()) {
-            if ( entry.getValue().getEffects().isEmpty() ) {
+            if (!entry.getValue().hasEffects()) {
                 cache.remove(entry.getKey());
                 continue;
             }
 
-            tickEffects(timestamp, entry.getValue());
+            tickAllEffects(timestamp, entry.getValue());
         }
     }
 
     public ApplyableCarrier<?> getOrCreateCarrier(Living entity) {
-        if ( cache.containsKey(entity.getUniqueId()) ) {
+        if (cache.containsKey(entity.getUniqueId())) {
             return cache.get(entity.getUniqueId());
         } else {
             EntityEffectCarrier newCarrier = new EntityEffectCarrier(entity);
@@ -54,35 +52,48 @@ public class EffectService {
         }
     }
 
-    private void tickEffects(long timestamp, ApplyableCarrier<?> carrier) {
-        carrier.getEffects().forEach(effect -> {
-            carrier.applyEffect(effect, timestamp);
-            carrier.removeEffect(effect, timestamp);
-        });
+    private void tickAllEffects(long timestamp, ApplyableCarrier<?> carrier) {
+        carrier.getEffects().forEach(effect -> tickEffect(timestamp, carrier, effect));
     }
 
-    public boolean applyEffect(Living entity, Applyable applyable) {
-        return getOrCreateCarrier(entity).applyEffect(applyable, System.currentTimeMillis());
+    private void tickEffect(long timestamp, ApplyableCarrier<?> carrier, Applyable effect) {
+        if (effect.canApply(timestamp, carrier)) {
+            effect.apply(timestamp, carrier);
+        }
+
+        if (effect.canRemove(timestamp, carrier)) {
+            effect.remove(timestamp, carrier);
+
+            if (carrier.hasEffect(effect)) {
+                carrier.removeEffect(effect);
+            }
+        }
+    }
+
+    public void applyEffect(Living entity, Applyable applyable) {
+        getOrCreateCarrier(entity).addEffect(applyable);
     }
 
     public boolean hasEffect(Living entity, Applyable applyable) {
         return getOrCreateCarrier(entity).hasEffect(applyable);
     }
 
-    public boolean removeEffect(Living entity, Applyable applyable) {
-        return getOrCreateCarrier(entity).removeEffect(applyable, System.currentTimeMillis());
+    public void removeEffect(Living entity, Applyable applyable) {
+        getOrCreateCarrier(entity).removeEffect(applyable);
     }
 
-    public boolean removeEffect(Living entity, String effectId) {
-        return getOrCreateCarrier(entity).removeEffect(effectId, System.currentTimeMillis());
+    public void removeEffect(Living entity, String effectId) {
+        Set<Applyable> effects = getOrCreateCarrier(entity).getEffects();
+
+        for (Applyable applyable : effects) {
+            if (applyable.getId().equals(effectId)) {
+                effects.remove(applyable);
+            }
+        }
     }
 
     public Optional<Applyable> getNamedEffect(String id) {
-        return effectRegistry.getById(id);
-    }
-
-    public void registerNamedEffect(Applyable effect) {
-        effectRegistry.register(effect);
+        return Sponge.getRegistry().getType(Applyable.class, id);
     }
 
 }

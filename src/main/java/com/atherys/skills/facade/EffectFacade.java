@@ -16,6 +16,9 @@ public class EffectFacade {
     @Inject
     EffectService effectService;
 
+    EffectFacade() {
+    }
+
     public void applyEffect(Living target, String effectId) throws CommandException {
         Optional<Applyable> namedEffect = effectService.getNamedEffect(effectId);
 
