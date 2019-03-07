@@ -80,9 +80,16 @@ public class SkillService {
 
     private boolean validatePermission(Living user, Castable skill) throws CastException {
         // If the user is a subject, check for permission.
-        // If the user is not a subject, just return true
+        // If the user is not a subject, just return true ( is presumed to be non-player character )
         if (user instanceof Subject) {
-            boolean permitted = ((Subject) user).hasPermission(skill.getPermission());
+            String permission = skill.getPermission();
+
+            // If no permission is set, just return true
+            if (permission == null) {
+                return true;
+            }
+
+            boolean permitted = ((Subject) user).hasPermission(permission);
 
             if (!permitted) {
                 throw CastErrors.noPermission(skill);
