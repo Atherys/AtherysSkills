@@ -4,48 +4,16 @@ import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.ApplyableCarrier;
 import com.atherys.skills.api.effect.PeriodicEffect;
 import com.atherys.skills.api.exception.CastException;
-import com.atherys.skills.api.property.AbstractSkillProperties;
 import com.atherys.skills.api.skill.CastErrors;
 import com.atherys.skills.api.skill.CastResult;
 import com.atherys.skills.api.skill.MouseButtonCombo;
 import com.atherys.skills.api.skill.TargetedSkill;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.event.cause.entity.damage.DamageTypes;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSources;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageReceiver;
 
-public class SimpleDamageEffectSkill extends TargetedSkill<SimpleDamageEffectSkill, SimpleDamageEffectSkill.Properties> {
-
-    public static class Properties extends AbstractSkillProperties<SimpleDamageEffectSkill, Properties> {
-
-        protected Properties() {
-            super(
-                    "atherysskills.skill.simpledamage",
-                    15.0,
-                    6000,
-                    MouseButtonCombo.EMPTY,
-                    "A simple damage skill. Aim at somebody, put in the amount of damage you want to do, and you're done."
-            );
-
-            addProperty("range", 60.0);
-            addProperty("default-damage", 20.0);
-            addProperty("default-duration", 20);
-        }
-
-        public double getDefaultDamage() {
-            return getOrDefault("default-damage", 20.0);
-        }
-
-        public int getDefaultDuration() {
-            return getOrDefault("default-seconds", 5);
-        }
-
-        @Override
-        public Properties copy() {
-            return new Properties();
-        }
-    }
+public class SimpleDamageEffectSkill extends TargetedSkill {
 
     public static class PeriodicSimpleDamageEffect extends PeriodicEffect {
 
@@ -76,6 +44,10 @@ public class SimpleDamageEffectSkill extends TargetedSkill<SimpleDamageEffectSki
         }
     }
 
+    private final double defaultDamage = 5.0;
+
+    private final int defaultDuration = 60;
+
     public SimpleDamageEffectSkill() {
         super(
                 "simple-damage-effect",
@@ -84,7 +56,7 @@ public class SimpleDamageEffectSkill extends TargetedSkill<SimpleDamageEffectSki
     }
 
     @Override
-    public CastResult cast(Living user, Living target, Properties properties, long timestamp, String... args) throws CastException {
+    public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
         if (args.length == 0) {
             throw CastErrors.invalidArguments();
         }
@@ -96,8 +68,8 @@ public class SimpleDamageEffectSkill extends TargetedSkill<SimpleDamageEffectSki
             damage = Double.parseDouble(args[0]);
             ticks = Integer.parseInt(args[1]);
         } catch (NumberFormatException e) {
-            damage = properties.getDefaultDamage();
-            ticks = properties.getDefaultDuration();
+            damage = defaultDamage;
+            ticks = defaultDuration;
         }
 
         if (user instanceof MessageReceiver) {
@@ -111,8 +83,13 @@ public class SimpleDamageEffectSkill extends TargetedSkill<SimpleDamageEffectSki
     }
 
     @Override
-    public Properties getDefaultProperties() {
-        return new Properties();
+    public long getCooldown(Living user) {
+        return 8000;
+    }
+
+    @Override
+    public double getResourceCost(Living user) {
+        return 25.0;
     }
 
 }

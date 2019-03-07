@@ -1,59 +1,18 @@
 package com.atherys.skills.skill;
 
 import com.atherys.skills.api.exception.CastException;
-import com.atherys.skills.api.property.AbstractSkillProperties;
 import com.atherys.skills.api.skill.CastErrors;
 import com.atherys.skills.api.skill.CastResult;
 import com.atherys.skills.api.skill.MouseButtonCombo;
 import com.atherys.skills.api.skill.TargetedSkill;
-import org.spongepowered.api.effect.Viewer;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSources;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageReceiver;
 
-public class SimpleDamageSkill extends TargetedSkill<SimpleDamageSkill, SimpleDamageSkill.Properties> {
+public class SimpleDamageSkill extends TargetedSkill {
 
-    public static class Properties extends AbstractSkillProperties<SimpleDamageSkill, SimpleDamageSkill.Properties> {
-
-        private static final double DEFAULT_RANGE = 60.0;
-
-        private static final double DEFAULT_DAMAGE = 20.0;
-
-        protected Properties() {
-            super(
-                    "atherysskills.skill.simpledamage",
-                    15.0,
-                    6000,
-                    MouseButtonCombo.EMPTY,
-                    "A simple damage skill. Aim at somebody, put in the amount of damage you want to do, and you're done."
-            );
-
-            addProperty("range", DEFAULT_RANGE);
-            addProperty("default-damage", DEFAULT_DAMAGE);
-        }
-
-        public double getRange() {
-            return getOrDefault("range", DEFAULT_RANGE);
-        }
-
-        public void setRange(double range) {
-            addProperty("range", range);
-        }
-
-        public double getDefaultDamage() {
-            return getOrDefault("default-damage", DEFAULT_DAMAGE);
-        }
-
-        public void setDefaultDamage(double defaultDamage) {
-            addProperty("default-damage", defaultDamage);
-        }
-
-        @Override
-        public Properties copy() {
-            return new Properties();
-        }
-    }
+    private final double defaultDamage = 5.0;
 
     public SimpleDamageSkill() {
         super(
@@ -63,7 +22,7 @@ public class SimpleDamageSkill extends TargetedSkill<SimpleDamageSkill, SimpleDa
     }
 
     @Override
-    public CastResult cast(Living user, Living target, Properties properties, long timestamp, String... args) throws CastException {
+    public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
         if (args.length == 0) {
             throw CastErrors.invalidArguments();
         }
@@ -73,7 +32,7 @@ public class SimpleDamageSkill extends TargetedSkill<SimpleDamageSkill, SimpleDa
         try {
             damage = Double.parseDouble(args[0]);
         } catch (NumberFormatException e) {
-            damage = properties.getDefaultDamage();
+            damage = defaultDamage;
         }
 
         if (user instanceof MessageReceiver) {
@@ -86,8 +45,12 @@ public class SimpleDamageSkill extends TargetedSkill<SimpleDamageSkill, SimpleDa
     }
 
     @Override
-    public Properties getDefaultProperties() {
-        return new Properties();
+    public long getCooldown(Living user) {
+        return 6000;
     }
 
+    @Override
+    public double getResourceCost(Living user) {
+        return 20.0;
+    }
 }

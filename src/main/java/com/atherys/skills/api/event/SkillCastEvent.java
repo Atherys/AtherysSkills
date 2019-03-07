@@ -1,6 +1,5 @@
 package com.atherys.skills.api.event;
 
-import com.atherys.skills.api.property.CastableProperties;
 import com.atherys.skills.api.skill.CastResult;
 import com.atherys.skills.api.skill.Castable;
 import org.spongepowered.api.Sponge;
@@ -17,15 +16,12 @@ public abstract class SkillCastEvent implements Event {
 
     protected Castable skill;
 
-    protected CastableProperties properties;
-
     private long timestamp;
 
-    public SkillCastEvent(Living user, Castable skill, CastableProperties properties, long timestamp) {
-        this.cause = Cause.of(Sponge.getCauseStackManager().getCurrentContext(), user, skill, properties);
+    public SkillCastEvent(Living user, Castable skill, long timestamp) {
+        this.cause = Cause.of(Sponge.getCauseStackManager().getCurrentContext(), user, skill);
         this.user = user;
         this.skill = skill;
-        this.properties = properties;
         this.timestamp = timestamp;
     }
 
@@ -35,10 +31,6 @@ public abstract class SkillCastEvent implements Event {
 
     public Castable getSkill() {
         return skill;
-    }
-
-    public CastableProperties getProperties() {
-        return properties;
     }
 
     public long getTimestamp() {
@@ -54,8 +46,8 @@ public abstract class SkillCastEvent implements Event {
 
         private boolean cancelled;
 
-        public Pre(Living user, Castable skill, CastableProperties properties, long timestamp) {
-            super(user, skill, properties, timestamp);
+        public Pre(Living user, Castable skill, long timestamp) {
+            super(user, skill, timestamp);
         }
 
         public void setUser(Living user) {
@@ -64,10 +56,6 @@ public abstract class SkillCastEvent implements Event {
 
         public void setSkill(Castable skill) {
             this.skill = skill;
-        }
-
-        public void setProperties(CastableProperties castableProperties) {
-            this.properties = castableProperties;
         }
 
         @Override
@@ -85,8 +73,8 @@ public abstract class SkillCastEvent implements Event {
 
         private CastResult result;
 
-        public Post(Living user, Castable skill, CastableProperties properties, long timestamp, CastResult result) {
-            super(user, skill, properties, timestamp);
+        public Post(Living user, Castable skill, long timestamp, CastResult result) {
+            super(user, skill, timestamp);
             this.result = result;
         }
 
