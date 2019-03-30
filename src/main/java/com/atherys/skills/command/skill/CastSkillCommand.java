@@ -31,7 +31,7 @@ public class CastSkillCommand implements PlayerCommand, ParameterizedCommand {
     public CommandElement[] getArguments() {
         return new CommandElement[] {
                 GenericArguments.string(Text.of("skill-id")),
-                GenericArguments.remainingJoinedStrings(Text.of("arguments..."))
+                GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("arguments...")))
         };
     }
 }
