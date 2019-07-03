@@ -12,7 +12,7 @@ public interface Applyable extends CatalogType {
      *
      * @param timestamp When this Applyable is going to be applied, in the form of a UNIX timestamp.
      * @param character The RPGCharacter this Applyable is to be applied on
-     * @return Whether or not the
+     * @return Whether or not the Applyable can be applied.
      */
     boolean canApply(long timestamp, ApplyableCarrier<?> character);
 

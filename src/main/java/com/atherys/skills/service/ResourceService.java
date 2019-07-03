@@ -1,4 +1,4 @@
-package com.atherys.skills.sevice;
+package com.atherys.skills.service;
 
 import com.google.inject.Singleton;
 

@@ -1,4 +1,4 @@
-package com.atherys.skills.sevice;
+package com.atherys.skills.service;
 
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
