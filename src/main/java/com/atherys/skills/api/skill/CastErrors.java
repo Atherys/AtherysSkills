@@ -21,27 +21,15 @@ public final class CastErrors {
     }
 
     public static CastException onCooldown(long timestamp, Castable castable, long cooldownEnd) {
-        String format = "H'h' m'm' s.S's'";
+        return exceptionOf(TextColors.DARK_RED, castable.getName(), TextColors.RED, " is on cooldown for another ", TextColors.WHITE, formatDuration(cooldownEnd - timestamp));
+    }
 
-        long duration = cooldownEnd - timestamp;
-
-        if (duration < 60000) {
-            format = "s.S's'";
-        }
-
-        if (duration >= 60000 && duration < 3600000) {
-            format = "m'm' s.S's'";
-        }
-
-        if (duration >= 3600000) {
-            format = "H'h' m'm' s.S's'";
-        }
-
-        return exceptionOf(TextColors.DARK_RED, castable.getName(), TextColors.RED, " is on cooldown for another ", TextColors.WHITE, DurationFormatUtils.formatDuration(duration, format, false));
+    public static CastException onGlobalCooldown(long timestamp, long cooldownEnd) {
+        return exceptionOf(TextColors.RED, "You are on global cooldown for another ", TextColors.WHITE, formatDuration(cooldownEnd - timestamp));
     }
 
     public static CastException insufficientResources(Castable castable, Resource resource) {
-        return exceptionOf("You do not have enough ", resource.toText(), TextColors.RESET, " to cast ", castable.getName());
+        return exceptionOf("You do not have enough ", resource.toText(), TextColors.RED, " to cast ", castable.getName());
     }
 
     public static CastException blocked(Castable castable) {
@@ -69,11 +57,32 @@ public final class CastErrors {
     }
 
     public static CastException internalError() {
-        return exceptionOf(TextColors.DARK_RED, "An internal error occurred while casting this skill. Please report this.");
+        return exceptionOf(TextColors.RED, "An internal error occurred while casting this skill. Please report this.");
     }
 
     public static CastException noPermission(Castable castable) {
         return exceptionOf(TextColors.RED, "You lack the permission required to use the skill ", castable.getName());
     }
 
+    public static CastException invalidArguments() {
+        return exceptionOf(TextColors.RED, "Invalid arguments were supplied to the skill.");
+    }
+
+    private static String formatDuration(long duration) {
+        String format = "H'h' m'm' s.S's'";
+
+        if (duration < 60000) {
+            format = "s.S's'";
+        }
+
+        if (duration >= 60000 && duration < 3600000) {
+            format = "m'm' s.S's'";
+        }
+
+        if (duration >= 3600000) {
+            format = "H'h' m'm' s.S's'";
+        }
+
+        return DurationFormatUtils.formatDuration(duration, format, false);
+    }
 }

@@ -1,8 +1,9 @@
 package com.atherys.skills.api.skill;
 
-import com.atherys.skills.api.property.CastableProperties;
+import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.text.Text;
 
-public abstract class AbstractSkill<T extends Castable<T, P>, P extends CastableProperties<T, P>> implements Castable<T,P> {
+public abstract class AbstractSkill implements Castable {
 
     private String id;
 
@@ -21,5 +22,15 @@ public abstract class AbstractSkill<T extends Castable<T, P>, P extends Castable
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getPermission() {
+        return null;
+    }
+
+    @Override
+    public Text getDescription(Living user) {
+        return null;
     }
 }

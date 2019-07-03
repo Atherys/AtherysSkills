@@ -16,8 +16,7 @@ public class EffectRegistry implements CatalogRegistryModule<Applyable> {
 
     private Map<String,Applyable> registry = new HashMap<>();
 
-    @Override
-    public void registerDefaults() {
+    public EffectRegistry() {
         EffectRegistrationEvent event = new EffectRegistrationEvent(this);
         Sponge.getEventManager().post(event);
     }

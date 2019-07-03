@@ -1,5 +1,6 @@
 package com.atherys.skills.registry;
 
+import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.skill.Castable;
 import com.atherys.skills.event.SkillRegistrationEvent;
 import com.google.inject.Singleton;
@@ -16,8 +17,7 @@ public class SkillRegistry implements CatalogRegistryModule<Castable> {
 
     private Map<String, Castable> registry = new HashMap<>();
 
-    @Override
-    public void registerDefaults() {
+    public SkillRegistry() {
         SkillRegistrationEvent event = new SkillRegistrationEvent(this);
         Sponge.getEventManager().post(event);
     }
@@ -28,6 +28,7 @@ public class SkillRegistry implements CatalogRegistryModule<Castable> {
     }
 
     public void register(Castable castable) {
+        Sponge.getEventManager().registerListeners(AtherysSkills.getInstance(), castable);
         registry.put(castable.getId(), castable);
     }
 

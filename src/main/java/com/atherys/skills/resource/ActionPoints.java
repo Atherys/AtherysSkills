@@ -5,10 +5,12 @@ import org.spongepowered.api.text.format.TextColors;
 
 public class ActionPoints extends AbstractResource {
 
-    protected ActionPoints(double starting) {
+    public static final String ID = "atherys:action_points";
+
+    public ActionPoints(double starting) {
         super(
                 TextColors.GOLD,
-                "atherys:action_points",
+                ID,
                 "Action Points",
                 100.0d,
                 starting,

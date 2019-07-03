@@ -5,10 +5,12 @@ import org.spongepowered.api.text.format.TextColors;
 
 public class Mana extends AbstractResource {
 
-    protected Mana(double starting) {
+    public static final String ID = "atherys:mana";
+
+    public Mana(double starting) {
         super(
                 TextColors.BLUE,
-                "atherys:mana",
+                ID,
                 "Mana",
                 100.0d,
                 starting,

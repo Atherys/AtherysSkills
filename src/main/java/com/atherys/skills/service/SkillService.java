@@ -1,13 +1,28 @@
 package com.atherys.skills.service;
 
+import com.atherys.skills.api.event.SkillCastEvent;
 import com.atherys.skills.api.exception.CastException;
+import com.atherys.skills.api.resource.ResourceUser;
+import com.atherys.skills.api.skill.CastErrors;
 import com.atherys.skills.api.skill.CastResult;
 import com.atherys.skills.api.skill.Castable;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.service.permission.Subject;
 
 @Singleton
 public class SkillService {
+
+    @Inject
+    ResourceService resourceService;
+
+    @Inject
+    CooldownService cooldownService;
+
+    SkillService() {
+    }
 
     /**
      * Casts a castable with the properties stored within this carrier
@@ -18,8 +33,100 @@ public class SkillService {
      * @param args      arguments
      * @return a {@link CastResult}
      */
-    CastResult castSkill(Living user, Castable castable, long timestamp, String... args) throws CastException {
-        return CastResult.empty();
+    public CastResult castSkill(Living user, Castable castable, long timestamp, String... args) throws CastException {
+        // Trigger the pre-cast event
+        SkillCastEvent.Pre preCastEvent = new SkillCastEvent.Pre(user, castable, timestamp);
+        Sponge.getEventManager().post(preCastEvent);
+
+        // If the pre-cast event was cancelled, throw a cancelled exception
+        if (preCastEvent.isCancelled()) {
+            throw CastErrors.cancelled(castable);
+        }
+
+        // Set the user, skill and skill properties to what was set in the pre-cast event
+        user = preCastEvent.getUser();
+        castable = preCastEvent.getSkill();
+
+        // Validate
+        if (validateSkillUse(user, castable, timestamp)) {
+
+            // Set cooldown(s) and withdraw resources
+            cooldownService.putOnGlobalCooldown(user, timestamp);
+            cooldownService.setLastUsedTimestamp(user, castable, timestamp);
+            resourceService.withdrawResource(user, castable.getResourceCost(user));
+
+            // Cast the skill
+            CastResult result = castable.cast(user, timestamp, args);
+
+            // Trigger the post-cast event with the result
+            SkillCastEvent.Post postCastEvent = new SkillCastEvent.Post(user, castable, timestamp, result);
+            Sponge.getEventManager().post(postCastEvent);
+
+            // Return the result
+            return result;
+        } else {
+            throw CastErrors.internalError();
+        }
     }
 
+    private boolean validateSkillUse(Living user, Castable castable, long timestamp) throws CastException {
+        boolean valid = validatePermission(user, castable);
+        valid = valid && validateGlobalCooldown(user, timestamp);
+        valid = valid && validateCooldown(user, castable, timestamp);
+        valid = valid && validateResources(user, castable);
+
+        return valid;
+    }
+
+    private boolean validatePermission(Living user, Castable skill) throws CastException {
+        // If the user is a subject, check for permission.
+        // If the user is not a subject, just return true ( is presumed to be non-player character )
+        if (user instanceof Subject) {
+            String permission = skill.getPermission();
+
+            // If no permission is set, just return true
+            if (permission == null) {
+                return true;
+            }
+
+            boolean permitted = ((Subject) user).hasPermission(permission);
+
+            if (!permitted) {
+                throw CastErrors.noPermission(skill);
+            }
+        }
+
+        return true;
+    }
+
+    private boolean validateGlobalCooldown(Living user, Long timestamp) throws CastException {
+        if (cooldownService.isOnGlobalCooldown(user, timestamp)) {
+            long cooldownEnd = cooldownService.getLastGlobalCooldownEnd(user);
+            throw CastErrors.onGlobalCooldown(timestamp, cooldownEnd);
+        }
+
+        return true;
+    }
+
+    private boolean validateCooldown(Living user, Castable castable, Long timestamp) throws CastException {
+        long lastUsed = cooldownService.getLastUsedTimestamp(user, castable);
+        long cooldownDuration = castable.getCooldown(user);
+
+        if (cooldownService.isCooldownOngoing(timestamp, lastUsed, cooldownDuration)) {
+            long cooldownEnd = cooldownService.getCooldownEnd(lastUsed, cooldownDuration);
+            throw CastErrors.onCooldown(timestamp, castable, cooldownEnd);
+        }
+
+        return true;
+    }
+
+    private boolean validateResources(Living user, Castable castable) throws CastException {
+        ResourceUser resourceUser = resourceService.getOrCreateUser(user);
+
+        if (resourceUser.getResource().getCurrent() < castable.getResourceCost(user)) {
+            throw CastErrors.insufficientResources(castable, resourceUser.getResource());
+        }
+
+        return true;
+    }
 }

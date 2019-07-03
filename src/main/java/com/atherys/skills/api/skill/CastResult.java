@@ -21,4 +21,8 @@ public class CastResult {
     public static CastResult success() {
         return new CastResult(Text.EMPTY);
     }
+
+    public Text getMessage() {
+        return message;
+    }
 }
