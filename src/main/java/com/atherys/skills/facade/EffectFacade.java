@@ -1,7 +1,7 @@
 package com.atherys.skills.facade;
 
 import com.atherys.skills.api.effect.Applyable;
-import com.atherys.skills.sevice.EffectService;
+import com.atherys.skills.service.EffectService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.spongepowered.api.command.CommandException;

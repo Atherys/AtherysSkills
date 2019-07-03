@@ -5,10 +5,10 @@ import com.atherys.skills.facade.SkillFacade;
 import com.atherys.skills.registry.EffectRegistry;
 import com.atherys.skills.registry.ResourceRegistry;
 import com.atherys.skills.registry.SkillRegistry;
-import com.atherys.skills.sevice.CooldownService;
-import com.atherys.skills.sevice.EffectService;
-import com.atherys.skills.sevice.ResourceService;
-import com.atherys.skills.sevice.SkillService;
+import com.atherys.skills.service.CooldownService;
+import com.atherys.skills.service.EffectService;
+import com.atherys.skills.service.ResourceService;
+import com.atherys.skills.service.SkillService;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 

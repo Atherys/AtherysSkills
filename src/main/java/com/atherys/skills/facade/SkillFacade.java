@@ -4,7 +4,7 @@ import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastErrors;
 import com.atherys.skills.api.skill.CastResult;
 import com.atherys.skills.api.skill.Castable;
-import com.atherys.skills.sevice.SkillService;
+import com.atherys.skills.service.SkillService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.spongepowered.api.Sponge;
