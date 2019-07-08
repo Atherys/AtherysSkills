@@ -5,6 +5,7 @@ import com.atherys.skills.api.skill.Castable;
 import com.atherys.skills.event.SkillRegistrationEvent;
 import com.google.inject.Singleton;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.registry.AdditionalCatalogRegistryModule;
 import org.spongepowered.api.registry.CatalogRegistryModule;
 
 import java.util.Collection;
@@ -13,7 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Singleton
-public class SkillRegistry implements CatalogRegistryModule<Castable> {
+public class SkillRegistry implements AdditionalCatalogRegistryModule<Castable> {
 
     private Map<String, Castable> registry = new HashMap<>();
 
@@ -35,5 +36,10 @@ public class SkillRegistry implements CatalogRegistryModule<Castable> {
     @Override
     public Collection<Castable> getAll() {
         return registry.values();
+    }
+
+    @Override
+    public void registerAdditionalCatalog(Castable castable) {
+        register(castable);
     }
 }

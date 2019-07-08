@@ -4,6 +4,7 @@ import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.event.EffectRegistrationEvent;
 import com.google.inject.Singleton;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.registry.AdditionalCatalogRegistryModule;
 import org.spongepowered.api.registry.CatalogRegistryModule;
 
 import java.util.Collection;
@@ -12,7 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Singleton
-public class EffectRegistry implements CatalogRegistryModule<Applyable> {
+public class EffectRegistry implements AdditionalCatalogRegistryModule<Applyable> {
 
     private Map<String,Applyable> registry = new HashMap<>();
 
@@ -33,5 +34,10 @@ public class EffectRegistry implements CatalogRegistryModule<Applyable> {
     @Override
     public Collection<Applyable> getAll() {
         return registry.values();
+    }
+
+    @Override
+    public void registerAdditionalCatalog(Applyable applyable) {
+        register(applyable);
     }
 }
