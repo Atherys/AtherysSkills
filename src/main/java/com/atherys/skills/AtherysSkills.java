@@ -7,8 +7,6 @@ import com.atherys.skills.api.resource.Resource;
 import com.atherys.skills.api.skill.Castable;
 import com.atherys.skills.command.effect.EffectCommand;
 import com.atherys.skills.command.skill.SkillCommand;
-import com.atherys.skills.event.EffectRegistrationEvent;
-import com.atherys.skills.event.SkillRegistrationEvent;
 import com.atherys.skills.facade.EffectFacade;
 import com.atherys.skills.facade.SkillFacade;
 import com.atherys.skills.registry.EffectRegistry;
@@ -25,9 +23,10 @@ import com.google.inject.Injector;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.GameRegistryEvent;
+import org.spongepowered.api.event.game.state.GameConstructionEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
-import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 
 import static com.atherys.skills.AtherysSkills.*;
@@ -87,10 +86,6 @@ public class AtherysSkills {
 
         components = new Components();
 
-        Sponge.getRegistry().registerModule(Resource.class, new ResourceRegistry());
-        Sponge.getRegistry().registerModule(Applyable.class, new EffectRegistry());
-        Sponge.getRegistry().registerModule(Castable.class, new SkillRegistry());
-
         skillsInjector = spongeInjector.createChildInjector(new AtherysSkillsModule());
         skillsInjector.injectMembers(components);
 
@@ -108,8 +103,10 @@ public class AtherysSkills {
         }
     }
 
-    private void stop() {
-
+    private void construct() {
+        Sponge.getRegistry().registerModule(Resource.class, new ResourceRegistry());
+        Sponge.getRegistry().registerModule(Applyable.class, new EffectRegistry());
+        Sponge.getRegistry().registerModule(Castable.class, new SkillRegistry());
     }
 
     @Listener
@@ -118,24 +115,20 @@ public class AtherysSkills {
     }
 
     @Listener
+    public void onPreInit(GameConstructionEvent event) {
+        construct();
+    }
+
+    @Listener
     public void onStart(GameStartedServerEvent event) {
         if (init) start();
     }
 
     @Listener
-    public void onStop(GameStoppedServerEvent event) {
-        if (init) stop();
-    }
-
-    @Listener
-    public void onEffectRegistration(EffectRegistrationEvent event) {
-
-    }
-
-    @Listener
-    public void onSkillResgistration(SkillRegistrationEvent event) {
-        event.registerSkill(new SimpleDamageSkill());
-        event.registerSkill(new SimpleDamageEffectSkill());
+    public void onSkillResgistration(GameRegistryEvent.Register<Castable> event) {
+        event.register(new SimpleDamageSkill());
+        event.register(new SimpleDamageEffectSkill());
+        logger.info("Registering skills...");
     }
 
     public static AtherysSkills getInstance() {
