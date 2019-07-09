@@ -9,9 +9,7 @@ import com.atherys.skills.command.effect.EffectCommand;
 import com.atherys.skills.command.skill.SkillCommand;
 import com.atherys.skills.facade.EffectFacade;
 import com.atherys.skills.facade.SkillFacade;
-import com.atherys.skills.registry.EffectRegistry;
 import com.atherys.skills.registry.ResourceRegistry;
-import com.atherys.skills.registry.SkillRegistry;
 import com.atherys.skills.service.CooldownService;
 import com.atherys.skills.service.EffectService;
 import com.atherys.skills.service.ResourceService;
@@ -91,6 +89,9 @@ public class AtherysSkills {
 
         getConfig().init();
 
+        components.skillService.registerSkill(new SimpleDamageSkill());
+        components.skillService.registerSkill(new SimpleDamageEffectSkill());
+
         init = true;
     }
 
@@ -105,8 +106,6 @@ public class AtherysSkills {
 
     private void construct() {
         Sponge.getRegistry().registerModule(Resource.class, new ResourceRegistry());
-        Sponge.getRegistry().registerModule(Applyable.class, new EffectRegistry());
-        Sponge.getRegistry().registerModule(Castable.class, new SkillRegistry());
     }
 
     @Listener
@@ -126,8 +125,6 @@ public class AtherysSkills {
 
     @Listener
     public void onSkillResgistration(GameRegistryEvent.Register<Castable> event) {
-        event.register(new SimpleDamageSkill());
-        event.register(new SimpleDamageEffectSkill());
         logger.info("Registering skills...");
     }
 

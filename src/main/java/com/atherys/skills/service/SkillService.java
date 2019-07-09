@@ -12,8 +12,14 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.service.permission.Subject;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 @Singleton
 public class SkillService {
+
+    private Map<String, Castable> skills = new HashMap<>();
 
     @Inject
     ResourceService resourceService;
@@ -22,6 +28,14 @@ public class SkillService {
     CooldownService cooldownService;
 
     SkillService() {
+    }
+
+    public void registerSkill(Castable castable) {
+        skills.put(castable.getId(), castable);
+    }
+
+    public Optional<Castable> getSkillById(String id) {
+        return Optional.ofNullable(skills.get(id));
     }
 
     /**

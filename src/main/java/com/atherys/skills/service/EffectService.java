@@ -4,12 +4,9 @@ import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.effect.ApplyableCarrier;
 import com.atherys.skills.effect.EntityEffectCarrier;
-import com.atherys.skills.registry.EffectRegistry;
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.registry.CatalogRegistryModule;
 import org.spongepowered.api.scheduler.Task;
 
 import java.util.*;
@@ -19,7 +16,17 @@ public class EffectService {
 
     private Task task;
 
+    private Map<String, Applyable> effects = new HashMap<>();
+
     private Map<UUID, ApplyableCarrier> cache = new HashMap<>();
+
+    public void registerEffect(Applyable applyable) {
+        effects.put(applyable.getId(), applyable);
+    }
+
+    public Optional<Applyable> getEffectById(String id) {
+        return Optional.ofNullable(effects.get(id));
+    }
 
     EffectService() {
         task = Task.builder()
