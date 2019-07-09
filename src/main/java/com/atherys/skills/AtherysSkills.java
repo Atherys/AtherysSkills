@@ -21,6 +21,7 @@ import com.google.inject.Injector;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.game.GameRegistryEvent;
 import org.spongepowered.api.event.game.state.GameConstructionEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
@@ -108,7 +109,7 @@ public class AtherysSkills {
         Sponge.getRegistry().registerModule(Resource.class, new ResourceRegistry());
     }
 
-    @Listener
+    @Listener(order = Order.EARLY)
     public void onInit(GameInitializationEvent event) {
         init();
     }
