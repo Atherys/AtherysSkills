@@ -24,6 +24,12 @@ public class EffectService {
         effects.put(applyable.getId(), applyable);
     }
 
+    public void registerEffects(Applyable... applyables) {
+        for (Applyable applyable : applyables) {
+            registerEffect(applyable);
+        }
+    }
+
     public Optional<Applyable> getEffectById(String id) {
         return Optional.ofNullable(effects.get(id));
     }

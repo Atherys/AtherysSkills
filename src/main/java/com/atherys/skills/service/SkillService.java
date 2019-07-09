@@ -34,6 +34,12 @@ public class SkillService {
         skills.put(castable.getId(), castable);
     }
 
+    public void registerSkills(Castable... castables) {
+        for (Castable castable : castables) {
+            registerSkill(castable);
+        }
+    }
+
     public Optional<Castable> getSkillById(String id) {
         return Optional.ofNullable(skills.get(id));
     }
