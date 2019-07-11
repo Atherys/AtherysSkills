@@ -37,7 +37,7 @@ public class SkillFacade {
             arguments = new String[0];
         }
 
-        Optional<Castable> castable = Sponge.getRegistry().getType(Castable.class, skillId);
+        Optional<Castable> castable = skillService.getSkillById(skillId);
 
         if (!castable.isPresent()) {
             throw CastErrors.noSuchSkill();
