@@ -25,6 +25,7 @@ public interface TargetedCastable extends Castable {
             // If a hit is registered
             if (entity instanceof Living) {
 
+                /* TODO: Fix this
                 // Cast a block ray from the registered target back to the user
                 BlockRay<World> blockRay = BlockRay
                         .from(entity.getLocation())
@@ -41,6 +42,8 @@ public interface TargetedCastable extends Castable {
                 } else {
                     return cast(user, (Living) entity, timestamp, args);
                 }
+                */
+                return cast(user, (Living) entity, timestamp, args);
             }
         }
 
