@@ -21,5 +21,4 @@ public interface Applyable extends CatalogType {
     boolean canRemove(long timestamp, ApplyableCarrier<?> character);
 
     boolean remove(long timestamp, ApplyableCarrier<?> character);
-
 }

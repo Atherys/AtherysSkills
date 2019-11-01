@@ -7,6 +7,8 @@ import com.atherys.skills.api.resource.Resource;
 import com.atherys.skills.api.skill.Castable;
 import com.atherys.skills.command.effect.EffectCommand;
 import com.atherys.skills.command.skill.SkillCommand;
+import com.atherys.skills.event.EffectRegistrationEvent;
+import com.atherys.skills.event.SkillRegistrationEvent;
 import com.atherys.skills.facade.EffectFacade;
 import com.atherys.skills.facade.SkillFacade;
 import com.atherys.skills.registry.ResourceRegistry;
@@ -45,31 +47,6 @@ public class AtherysSkills {
 
     private static boolean init;
 
-    private static class Components {
-
-        @Inject
-        AtherysSkillsConfig config;
-
-        @Inject
-        EffectService effectService;
-
-        @Inject
-        SkillService skillService;
-
-        @Inject
-        CooldownService cooldownService;
-
-        @Inject
-        ResourceService resourceService;
-
-        @Inject
-        EffectFacade effectFacade;
-
-        @Inject
-        SkillFacade skillFacade;
-
-    }
-
     @Inject
     private Logger logger;
 
@@ -89,6 +66,9 @@ public class AtherysSkills {
         skillsInjector.injectMembers(components);
 
         getConfig().init();
+
+        Sponge.getEventManager().post(new EffectRegistrationEvent(components.effectService));
+        Sponge.getEventManager().post(new SkillRegistrationEvent(components.skillService));
 
         components.skillService.registerSkill(new SimpleDamageSkill());
         components.skillService.registerSkill(new SimpleDamageEffectSkill());
@@ -159,5 +139,30 @@ public class AtherysSkills {
 
     public SkillFacade getSkillFacade() {
         return components.skillFacade;
+    }
+
+    private static class Components {
+
+        @Inject
+        AtherysSkillsConfig config;
+
+        @Inject
+        EffectService effectService;
+
+        @Inject
+        SkillService skillService;
+
+        @Inject
+        CooldownService cooldownService;
+
+        @Inject
+        ResourceService resourceService;
+
+        @Inject
+        EffectFacade effectFacade;
+
+        @Inject
+        SkillFacade skillFacade;
+
     }
 }
