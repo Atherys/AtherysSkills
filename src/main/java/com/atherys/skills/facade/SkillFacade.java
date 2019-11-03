@@ -7,7 +7,6 @@ import com.atherys.skills.api.skill.Castable;
 import com.atherys.skills.service.SkillService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;

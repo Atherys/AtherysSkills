@@ -5,7 +5,6 @@ import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.effect.ApplyableCarrier;
 import com.atherys.skills.effect.EntityEffectCarrier;
 import com.google.inject.Singleton;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.scheduler.Task;
 
@@ -106,7 +105,7 @@ public class EffectService {
     }
 
     public Optional<Applyable> getNamedEffect(String id) {
-        return Sponge.getRegistry().getType(Applyable.class, id);
+        return Optional.ofNullable(effects.get(id));
     }
 
 }
