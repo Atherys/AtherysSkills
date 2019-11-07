@@ -86,8 +86,19 @@ public class EffectService {
         getOrCreateCarrier(entity).addEffect(applyable);
     }
 
+    public void applyEffect(Living entity, String effectId) {
+        Applyable effect = effects.get(effectId);
+        if (effect != null) {
+            getOrCreateCarrier(entity).addEffect(effect);
+        }
+    }
+
     public boolean hasEffect(Living entity, Applyable applyable) {
         return getOrCreateCarrier(entity).hasEffect(applyable);
+    }
+
+    public boolean hasEffect(Living entity, String effectId) {
+        return getOrCreateCarrier(entity).getEffects().stream().anyMatch(effect -> effectId.equals(effect.getId()));
     }
 
     public void removeEffect(Living entity, Applyable applyable) {
