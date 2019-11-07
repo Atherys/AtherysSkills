@@ -1,5 +1,6 @@
 package com.atherys.skills.service;
 
+import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.event.SkillCastEvent;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.resource.ResourceUser;
@@ -32,6 +33,7 @@ public class SkillService {
 
     public void registerSkill(Castable castable) {
         skills.put(castable.getId(), castable);
+        Sponge.getEventManager().registerListeners(AtherysSkills.getInstance(), castable);
     }
 
     public void registerSkills(Castable... castables) {
