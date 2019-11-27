@@ -22,7 +22,7 @@ public class EffectFacade {
     public void applyEffect(Living target, String effectId) throws CommandException {
         Optional<Applyable> namedEffect = effectService.getNamedEffect(effectId);
 
-        if ( !namedEffect.isPresent() ) {
+        if (!namedEffect.isPresent()) {
             throw new CommandException(Text.of("No effect with an id of \"", effectId, "\" could be found."));
         }
 

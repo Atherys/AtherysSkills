@@ -44,14 +44,14 @@ public class EffectService {
     private void tick() {
         long timestamp = System.currentTimeMillis();
 
-        for (Map.Entry<UUID, ApplyableCarrier> entry : cache.entrySet()) {
-            if (!entry.getValue().hasEffects()) {
-                cache.remove(entry.getKey());
-                continue;
+        cache.entrySet().removeIf(entry -> {
+            if (entry.getValue().hasEffects()) {
+                tickAllEffects(timestamp, entry.getValue());
+                return false;
+            } else {
+                return true;
             }
-
-            tickAllEffects(timestamp, entry.getValue());
-        }
+        });
     }
 
     public ApplyableCarrier<?> getOrCreateCarrier(Living entity) {
