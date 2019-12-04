@@ -5,6 +5,8 @@ plugins {
 
 group 'com.atherys'
 
+version '1.0.0'
+
 dependencies {
     shadow 'org.spongepowered:spongeapi:7.1.0'
     shadow 'com.github.Atherys-Horizons:AtherysCore:1.13.2'
