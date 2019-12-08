@@ -107,11 +107,15 @@ public class EffectService {
     public void removeEffect(Living entity, String effectId) {
         Set<Applyable> effects = getOrCreateCarrier(entity).getEffects();
 
-        effects.removeIf(applyable -> applyable.getId().equals(effectId));
+        effects.removeIf(effect -> effect.getId().equals(effectId));
     }
 
     public void clearEffects(Living entity) {
-        getOrCreateCarrier(entity).clearEffects();
+        ApplyableCarrier<?> carrier = getOrCreateCarrier(entity);
+        long timestamp = System.currentTimeMillis();
+
+        carrier.getEffects().forEach(effect -> effect.remove(timestamp, carrier));
+        carrier.clearEffects();
     }
 
     public Optional<Applyable> getNamedEffect(String id) {
