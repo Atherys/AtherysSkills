@@ -11,6 +11,7 @@ import com.atherys.skills.event.EffectRegistrationEvent;
 import com.atherys.skills.event.SkillRegistrationEvent;
 import com.atherys.skills.facade.EffectFacade;
 import com.atherys.skills.facade.SkillFacade;
+import com.atherys.skills.listener.EntityListener;
 import com.atherys.skills.registry.ResourceRegistry;
 import com.atherys.skills.service.CooldownService;
 import com.atherys.skills.service.EffectService;
@@ -66,6 +67,8 @@ public class AtherysSkills {
         skillsInjector.injectMembers(components);
 
         getConfig().init();
+
+        Sponge.getEventManager().registerListeners(this, components.entityListener);
 
         Sponge.getEventManager().post(new EffectRegistrationEvent(components.effectService));
         Sponge.getEventManager().post(new SkillRegistrationEvent(components.skillService));
@@ -164,5 +167,7 @@ public class AtherysSkills {
         @Inject
         SkillFacade skillFacade;
 
+        @Inject
+        EntityListener entityListener;
     }
 }

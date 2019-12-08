@@ -108,11 +108,11 @@ public class EffectService {
     public void removeEffect(Living entity, String effectId) {
         Set<Applyable> effects = getOrCreateCarrier(entity).getEffects();
 
-        for (Applyable applyable : effects) {
-            if (applyable.getId().equals(effectId)) {
-                effects.remove(applyable);
-            }
-        }
+        effects.removeIf(applyable -> applyable.getId().equals(effectId));
+    }
+
+    public void clearEffects(Living entity) {
+        getOrCreateCarrier(entity).clearEffects();
     }
 
     public Optional<Applyable> getNamedEffect(String id) {

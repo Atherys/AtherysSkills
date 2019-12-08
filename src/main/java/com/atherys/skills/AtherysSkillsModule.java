@@ -2,6 +2,7 @@ package com.atherys.skills;
 
 import com.atherys.skills.facade.EffectFacade;
 import com.atherys.skills.facade.SkillFacade;
+import com.atherys.skills.listener.EntityListener;
 import com.atherys.skills.registry.ResourceRegistry;
 import com.atherys.skills.service.CooldownService;
 import com.atherys.skills.service.EffectService;
@@ -18,6 +19,9 @@ public class AtherysSkillsModule extends AbstractModule {
 
         // Registries
         bind(ResourceRegistry.class).in(Scopes.SINGLETON);
+
+        // Listeners
+        bind(EntityListener.class).in(Scopes.SINGLETON);
 
         // Services
         bind(CooldownService.class).in(Scopes.SINGLETON);

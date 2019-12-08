@@ -33,4 +33,8 @@ public class EffectFacade {
         effectService.removeEffect(target, effectId);
     }
 
+    public void onEntityDeath(Living living) {
+        effectService.clearEffects(living);
+    }
+
 }
