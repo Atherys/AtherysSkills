@@ -65,21 +65,20 @@ public class EffectService {
     }
 
     private void tickAllEffects(long timestamp, ApplyableCarrier<?> carrier) {
-        carrier.getEffects().forEach(effect -> tickEffect(timestamp, carrier, effect));
+        carrier.getEffects().removeIf(effect -> tickEffect(timestamp, carrier, effect));
     }
 
-    private void tickEffect(long timestamp, ApplyableCarrier<?> carrier, Applyable effect) {
+    private boolean tickEffect(long timestamp, ApplyableCarrier<?> carrier, Applyable effect) {
         if (effect.canApply(timestamp, carrier)) {
             effect.apply(timestamp, carrier);
         }
 
         if (effect.canRemove(timestamp, carrier)) {
             effect.remove(timestamp, carrier);
-
-            if (carrier.hasEffect(effect)) {
-                carrier.removeEffect(effect);
-            }
+            return true;
         }
+
+        return false;
     }
 
     public void applyEffect(Living entity, Applyable applyable) {
