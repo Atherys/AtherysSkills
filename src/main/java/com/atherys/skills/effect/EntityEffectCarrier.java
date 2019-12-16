@@ -59,11 +59,6 @@ public class EntityEffectCarrier implements SpongeIdentifiable, ApplyableCarrier
         return effects;
     }
 
-    @Override
-    public void clearEffects() {
-        effects.clear();
-    }
-
     @Nonnull
     @Override
     public UUID getId() {

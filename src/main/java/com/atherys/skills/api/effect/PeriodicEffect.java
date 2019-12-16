@@ -8,8 +8,8 @@ public abstract class PeriodicEffect extends AbstractEffect {
 
     private int ticksRemaining;
 
-    protected PeriodicEffect(String id, String name, long timeBetweenTicks, int ticks) {
-        super(id, name);
+    protected PeriodicEffect(String id, String name, long timeBetweenTicks, int ticks, boolean isPositive) {
+        super(id, name, isPositive);
         this.timeBetween = timeBetweenTicks;
         this.ticksRemaining = ticks;
     }
@@ -35,6 +35,11 @@ public abstract class PeriodicEffect extends AbstractEffect {
     @Override
     public boolean remove(long timestamp, ApplyableCarrier<?> character) {
         return remove(character);
+    }
+
+    @Override
+    public void setRemoved() {
+        ticksRemaining = 0;
     }
 
     protected abstract boolean apply(ApplyableCarrier<?> character);

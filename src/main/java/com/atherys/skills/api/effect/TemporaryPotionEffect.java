@@ -12,16 +12,17 @@ public class TemporaryPotionEffect extends TemporaryEffect {
 
     private PotionEffect effect;
 
-    public TemporaryPotionEffect(String id, String name, PotionEffect effect) {
-        super(id, name, effect.getDuration() * 50);
+    public TemporaryPotionEffect(String id, String name, PotionEffect effect, boolean isPositive) {
+        super(id, name, effect.getDuration() * 50, isPositive);
         this.effect = effect;
     }
 
-    public static TemporaryPotionEffect of(PotionEffectType effectType, int duration, int amplifier) {
+    public static TemporaryPotionEffect of(PotionEffectType effectType, int duration, int amplifier, boolean isPositive) {
         return new TemporaryPotionEffect(
                 "atherys:" + effectType.getId() + "_effect",
                 effectType.getName(),
-                PotionEffect.of(effectType, duration, amplifier)
+                PotionEffect.of(effectType, duration, amplifier),
+                isPositive
         );
     }
 

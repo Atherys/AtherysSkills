@@ -27,4 +27,14 @@ public interface Applyable extends CatalogType {
      * WARNING: Do not remove the effect from the carrier here. The {@link EffectService} will take care of that.
      */
     boolean remove(long timestamp, ApplyableCarrier<?> character);
+
+    /**
+     * @return whether this effect does something positive to the character or not.
+     */
+    boolean isPositive();
+
+    /**
+     * Sets this effect to be removed in the next tick. Use this to end an effect early.
+     */
+    void setRemoved();
 }
