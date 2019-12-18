@@ -21,6 +21,4 @@ public interface ApplyableCarrier<T extends Living> {
     boolean hasEffects();
 
     Set<Applyable> getEffects();
-
-    void clearEffects();
 }

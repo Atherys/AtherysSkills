@@ -112,10 +112,28 @@ public class EffectService {
 
     public void clearEffects(Living entity) {
         ApplyableCarrier<?> carrier = getOrCreateCarrier(entity);
-        long timestamp = System.currentTimeMillis();
 
-        carrier.getEffects().forEach(effect -> effect.remove(timestamp, carrier));
-        carrier.clearEffects();
+        carrier.getEffects().forEach(Applyable::setRemoved);
+    }
+
+    public void clearNegativeEffects(Living entity) {
+        ApplyableCarrier<?> carrier = getOrCreateCarrier(entity);
+
+        carrier.getEffects().forEach(applyable -> {
+            if (!applyable.isPositive()) {
+                applyable.setRemoved();
+            }
+        });
+    }
+
+    public void clearPositiveEffects(Living entity) {
+        ApplyableCarrier<?> carrier = getOrCreateCarrier(entity);
+
+        carrier.getEffects().forEach(applyable -> {
+            if (applyable.isPositive()) {
+                applyable.setRemoved();
+            }
+        });
     }
 
     public Optional<Applyable> getNamedEffect(String id) {

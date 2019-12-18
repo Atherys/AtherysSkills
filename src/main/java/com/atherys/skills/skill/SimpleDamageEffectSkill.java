@@ -20,7 +20,7 @@ public class SimpleDamageEffectSkill extends TargetedSkill {
         private double damage;
 
         protected PeriodicSimpleDamageEffect(long timeBetweenTicks, int ticks, double damage) {
-            super("periodic-simple-damage-effect", "Periodic Simple Damage Effect", timeBetweenTicks, ticks);
+            super("periodic-simple-damage-effect", "Periodic Simple Damage Effect", timeBetweenTicks, ticks, false);
             this.damage = damage;
         }
 

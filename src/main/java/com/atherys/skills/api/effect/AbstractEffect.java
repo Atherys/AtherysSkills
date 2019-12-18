@@ -6,10 +6,12 @@ public abstract class AbstractEffect implements Applyable {
 
     private String id;
     private String name;
+    private boolean isPositive;
 
-    protected AbstractEffect(String id, String name) {
+    protected AbstractEffect(String id, String name, boolean isPositive) {
         this.id = id;
         this.name = name;
+        this.isPositive = isPositive;
     }
 
     @Override
@@ -20,6 +22,11 @@ public abstract class AbstractEffect implements Applyable {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public boolean isPositive() {
+        return isPositive;
     }
 
     @Override
