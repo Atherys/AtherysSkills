@@ -72,13 +72,13 @@ public class SkillService {
         // Validate
         if (validateSkillUse(user, castable, timestamp)) {
 
+            // Cast the skill
+            CastResult result = castable.cast(user, timestamp, args);
+
             // Set cooldown(s) and withdraw resources
             cooldownService.putOnGlobalCooldown(user, timestamp);
             cooldownService.setLastUsedTimestamp(user, castable, timestamp);
             resourceService.withdrawResource(user, castable.getResourceCost(user));
-
-            // Cast the skill
-            CastResult result = castable.cast(user, timestamp, args);
 
             // Trigger the post-cast event with the result
             SkillCastEvent.Post postCastEvent = new SkillCastEvent.Post(user, castable, timestamp, result);
