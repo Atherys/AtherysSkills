@@ -48,6 +48,10 @@ public class ResourceService {
             Resource resource = user.getResource();
             double regenAmount = resource.getRegen();
 
+            if (resource.getMax() - resource.getCurrent() <= regenAmount) {
+                regenAmount = resource.getMax() - resource.getCurrent();
+            }
+
             ResourceRegenEvent event = new ResourceRegenEvent(user, regenAmount);
             Sponge.getEventManager().post(event);
 
@@ -56,11 +60,6 @@ public class ResourceService {
             }
 
             user.addResource(event.getRegenAmount());
-
-            // TODO: Move informational messages to facade layer
-            if (user.getResource().getCurrent() != user.getResource().getMax()) {
-                skillMessagingFacade.info(Sponge.getServer().getPlayer(uuid).get(), "Current ", user.getResource().getColor(), user.getResource().getName(), TextColors.RESET, " is ", user.getResource().getCurrent(), "/", user.getResource().getMax());
-            }
         });
     }
 

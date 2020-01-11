@@ -2,7 +2,6 @@ package com.atherys.skills;
 
 import com.atherys.core.AtherysCore;
 import com.atherys.core.command.CommandService;
-import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.resource.Resource;
 import com.atherys.skills.api.skill.Castable;
 import com.atherys.skills.command.effect.EffectCommand;
@@ -10,8 +9,11 @@ import com.atherys.skills.command.skill.SkillCommand;
 import com.atherys.skills.event.EffectRegistrationEvent;
 import com.atherys.skills.event.SkillRegistrationEvent;
 import com.atherys.skills.facade.EffectFacade;
+import com.atherys.skills.facade.ResourceFacade;
 import com.atherys.skills.facade.SkillFacade;
+import com.atherys.skills.facade.SkillMessagingFacade;
 import com.atherys.skills.listener.EntityListener;
+import com.atherys.skills.listener.ResourceListener;
 import com.atherys.skills.registry.ResourceRegistry;
 import com.atherys.skills.service.CooldownService;
 import com.atherys.skills.service.EffectService;
@@ -69,6 +71,7 @@ public class AtherysSkills {
         getConfig().init();
 
         Sponge.getEventManager().registerListeners(this, components.entityListener);
+        Sponge.getEventManager().registerListeners(this, components.resourceListener);
 
         Sponge.getEventManager().post(new EffectRegistrationEvent(components.effectService));
         Sponge.getEventManager().post(new SkillRegistrationEvent(components.skillService));
@@ -144,6 +147,10 @@ public class AtherysSkills {
         return components.skillFacade;
     }
 
+    public SkillMessagingFacade getMessagingFacade() {
+        return components.skillMessagingFacade;
+    }
+
     private static class Components {
 
         @Inject
@@ -168,6 +175,15 @@ public class AtherysSkills {
         SkillFacade skillFacade;
 
         @Inject
+        SkillMessagingFacade skillMessagingFacade;
+
+        @Inject
+        ResourceFacade resourceFacade;
+
+        @Inject
         EntityListener entityListener;
+
+        @Inject
+        ResourceListener resourceListener;
     }
 }
