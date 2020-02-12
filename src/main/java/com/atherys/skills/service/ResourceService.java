@@ -24,28 +24,29 @@ public class ResourceService {
 
     private AtherysSkillsConfig config;
 
-    private SkillMessagingFacade skillMessagingFacade;
-
     private Map<UUID, ResourceUser> resourceUsers = new HashMap<>();
 
     private Task resourceRegenTask;
 
     @Inject
-    ResourceService(AtherysSkillsConfig config, SkillMessagingFacade skillMessagingFacade) {
+    ResourceService(AtherysSkillsConfig config) {
         this.config = config;
         this.resourceRegenTask = Task.builder()
                 .name("atherysskills-resource-regen-task")
                 .execute(this::regenResources)
                 .intervalTicks(config.RESOURCE_REGEN_TICK_INTERVAL)
                 .submit(AtherysSkills.getInstance());
-
-        // TODO: Move informational messages to facade layer
-        this.skillMessagingFacade = skillMessagingFacade;
     }
 
     public void regenResources() {
         resourceUsers.forEach((uuid, user) -> {
             Resource resource = user.getResource();
+
+            // If the curent amount of resources is the same as the maximum, don't regen
+            if (resource.getCurrent() >= resource.getMax()) {
+                return;
+            }
+
             double regenAmount = resource.getRegen();
 
             if (resource.getMax() - resource.getCurrent() <= regenAmount) {
