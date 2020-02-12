@@ -15,6 +15,9 @@ public class AtherysSkillsConfig extends PluginConfig {
     @Setting("resource-regen-interval-ticks")
     public int RESOURCE_REGEN_TICK_INTERVAL = 20;
 
+    @Setting("resource-limit")
+    public double RESOURCE_LIMIT = 100.0d;
+
     protected AtherysSkillsConfig() throws IOException {
         super("config/" + AtherysSkills.ID, "config.conf");
     }
