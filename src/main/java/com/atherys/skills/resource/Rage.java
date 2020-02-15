@@ -13,8 +13,6 @@ public class Rage extends AbstractResource {
                 TextColors.DARK_RED,
                 ID,
                 "Rage",
-                AtherysSkills.getInstance().getConfig().RESOURCE_LIMIT,
-                starting,
                 5.0d
         );
     }

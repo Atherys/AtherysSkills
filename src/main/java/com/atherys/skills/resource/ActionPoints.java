@@ -13,8 +13,6 @@ public class ActionPoints extends AbstractResource {
                 TextColors.GOLD,
                 ID,
                 "Action Points",
-                AtherysSkills.getInstance().getConfig().RESOURCE_LIMIT,
-                starting,
                 5.0d
         );
     }

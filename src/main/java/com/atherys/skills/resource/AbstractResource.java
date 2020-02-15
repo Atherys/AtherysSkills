@@ -1,5 +1,6 @@
 package com.atherys.skills.resource;
 
+import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.resource.Resource;
 import com.atherys.skills.api.util.MathUtils;
 import com.google.gson.annotations.Expose;
@@ -17,23 +18,21 @@ public abstract class AbstractResource implements Resource {
     @Expose private String name;
 
     @Expose private TextColor color;
-    @Expose private double max;
     @Expose private double current;
     @Expose private double regen;
 
 
-    protected AbstractResource(TextColor color, String id, String name, double max, double current, double regen) {
+    protected AbstractResource(TextColor color, String id, String name, double regen) {
         this.color = color;
         this.id = id;
         this.name = name;
-        this.max = max;
-        this.current = MathUtils.clamp(current, 0.0d, max);
+        this.current = 0.0d;
         this.regen = regen;
     }
 
     @Override
     public double getMax() {
-        return max;
+        return AtherysSkills.getInstance().getConfig().RESOURCE_LIMIT;
     }
 
     @Override
@@ -42,7 +41,7 @@ public abstract class AbstractResource implements Resource {
     }
 
     private void change(double delta) {
-        this.current = MathUtils.clamp(current + delta, 0.0d, max);
+        this.current = MathUtils.clamp(current + delta, 0.0d, getMax());
     }
 
     @Override

@@ -13,8 +13,6 @@ public class Mana extends AbstractResource {
                 TextColors.BLUE,
                 ID,
                 "Mana",
-                AtherysSkills.getInstance().getConfig().RESOURCE_LIMIT,
-                starting,
                 5.0d
         );
     }
