@@ -12,11 +12,13 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.format.TextColors;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Singleton
@@ -53,7 +55,16 @@ public class ResourceService {
                 regenAmount = resource.getMax() - resource.getCurrent();
             }
 
-            ResourceRegenEvent event = new ResourceRegenEvent(user, regenAmount);
+            // TODO: Make this work for all living entities, not just players
+            Optional<Player> entity = Sponge.getServer().getOnlinePlayers().stream().filter(p -> p.getUniqueId().equals(uuid)).findAny();
+
+            ResourceRegenEvent event;
+            if (entity.isPresent()) {
+                event = new ResourceRegenEvent(entity.get(), user, regenAmount);
+            } else {
+                event = new ResourceRegenEvent(user, regenAmount);
+            }
+
             Sponge.getEventManager().post(event);
 
             if (event.isCancelled()) {

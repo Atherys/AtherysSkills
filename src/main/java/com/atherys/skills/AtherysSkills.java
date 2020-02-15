@@ -151,6 +151,10 @@ public class AtherysSkills {
         return components.skillMessagingFacade;
     }
 
+    public Logger getLogger() {
+        return logger;
+    }
+
     private static class Components {
 
         @Inject
