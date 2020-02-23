@@ -3,6 +3,8 @@ package com.atherys.skills.facade;
 import com.atherys.skills.api.event.ResourceRegenEvent;
 import com.atherys.skills.api.resource.Resource;
 import com.atherys.skills.resource.EntityResourceUser;
+import com.atherys.skills.service.ResourceService;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
@@ -14,6 +16,9 @@ import java.util.Optional;
 @Singleton
 public class ResourceFacade {
 
+    @Inject
+    ResourceService resourceService;
+
     public void onResourceRegen(ResourceRegenEvent event) {
 
         if (event.getRegenAmount() > 0 && event.getResourceUser() instanceof EntityResourceUser) {
@@ -21,9 +26,14 @@ public class ResourceFacade {
 
             player.ifPresent(p -> {
                 Resource resource = event.getResourceUser().getResource();
-                Text display = Text.of(resource.getColor(), resource.getCurrent() + event.getRegenAmount(), "/", resource.getMax(), " ", resource.getName());
+                int amount = (int) (event.getRegenAmount() + resource.getCurrent());
+                Text display = Text.of(resource.getColor(), amount, "/", (int) resource.getMax(), " ", resource.getName());
                 p.sendTitle(Title.builder().actionBar(display).fadeOut(100).build());
             });
         }
+    }
+
+    public void onPlayerJoin(Player player) {
+        resourceService.getOrCreateUser(player);
     }
 }
