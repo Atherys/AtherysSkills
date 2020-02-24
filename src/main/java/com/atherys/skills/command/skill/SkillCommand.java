@@ -2,7 +2,6 @@ package com.atherys.skills.command.skill;
 
 import com.atherys.core.command.annotation.Aliases;
 import com.atherys.core.command.annotation.Children;
-import com.atherys.core.command.annotation.Permission;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;

@@ -7,10 +7,6 @@ import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
 public class LivingUtils {
 
     public static DataTransactionResult applyPotionEffect(Living living, PotionEffect effect) {

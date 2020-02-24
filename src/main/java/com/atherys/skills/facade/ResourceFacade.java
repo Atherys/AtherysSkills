@@ -27,6 +27,8 @@ public class ResourceFacade {
             player.ifPresent(p -> {
                 Resource resource = event.getResourceUser().getResource();
                 int amount = (int) (event.getRegenAmount() + resource.getCurrent());
+                amount = amount < resource.getMax() ? amount : (int) resource.getMax();
+
                 Text display = Text.of(resource.getColor(), amount, "/", (int) resource.getMax(), " ", resource.getName());
                 p.sendTitle(Title.builder().actionBar(display).fadeOut(100).build());
             });

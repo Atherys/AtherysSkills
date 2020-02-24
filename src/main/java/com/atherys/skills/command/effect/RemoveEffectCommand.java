@@ -14,7 +14,6 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
 import javax.annotation.Nonnull;
-import javax.persistence.Parameter;
 
 @Aliases("remove")
 @Permission("atherysskills.effect.remove")

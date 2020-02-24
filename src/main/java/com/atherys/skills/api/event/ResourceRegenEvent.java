@@ -3,7 +3,6 @@ package com.atherys.skills.api.event;
 import com.atherys.skills.api.resource.ResourceUser;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Cancellable;
 import org.spongepowered.api.event.Event;
 import org.spongepowered.api.event.cause.Cause;

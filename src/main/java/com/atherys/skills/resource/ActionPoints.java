@@ -1,6 +1,5 @@
 package com.atherys.skills.resource;
 
-import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.resource.Resource;
 import org.spongepowered.api.text.format.TextColors;
 

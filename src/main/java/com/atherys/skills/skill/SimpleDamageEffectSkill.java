@@ -6,7 +6,6 @@ import com.atherys.skills.api.effect.PeriodicEffect;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastErrors;
 import com.atherys.skills.api.skill.CastResult;
-import com.atherys.skills.api.skill.MouseButtonCombo;
 import com.atherys.skills.api.skill.TargetedSkill;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSources;

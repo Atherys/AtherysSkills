@@ -3,12 +3,7 @@ package com.atherys.skills.api.skill;
 import com.atherys.skills.api.exception.CastException;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.util.blockray.BlockRay;
-import org.spongepowered.api.util.blockray.BlockRayHit;
-import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.EntityUniverse;
-
-import java.util.Optional;
 
 public interface TargetedCastable extends Castable {
     @Override

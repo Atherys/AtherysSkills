@@ -5,7 +5,6 @@ import com.atherys.skills.AtherysSkillsConfig;
 import com.atherys.skills.api.event.ResourceRegenEvent;
 import com.atherys.skills.api.resource.Resource;
 import com.atherys.skills.api.resource.ResourceUser;
-import com.atherys.skills.facade.SkillMessagingFacade;
 import com.atherys.skills.resource.ActionPoints;
 import com.atherys.skills.resource.EntityResourceUser;
 import com.google.inject.Inject;
@@ -14,7 +13,6 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scheduler.Task;
-import org.spongepowered.api.text.format.TextColors;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,7 +54,7 @@ public class ResourceService {
             }
 
             // TODO: Make this work for all living entities, not just players
-            Optional<Player> entity = Sponge.getServer().getOnlinePlayers().stream().filter(p -> p.getUniqueId().equals(uuid)).findAny();
+            Optional<Player> entity = Sponge.getServer().getPlayer(uuid);
 
             ResourceRegenEvent event;
             if (entity.isPresent()) {
@@ -79,7 +77,7 @@ public class ResourceService {
         ResourceUser resourceUser = resourceUsers.get(user.getUniqueId());
 
         if (resourceUser == null) {
-            resourceUser = new EntityResourceUser(user, new ActionPoints(100.0));
+            resourceUser = new EntityResourceUser(user, new ActionPoints(config.RESOURCE_LIMIT));
             resourceUsers.put(user.getUniqueId(), resourceUser);
         }
 
