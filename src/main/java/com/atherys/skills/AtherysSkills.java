@@ -2,7 +2,6 @@ package com.atherys.skills;
 
 import com.atherys.core.AtherysCore;
 import com.atherys.core.command.CommandService;
-import com.atherys.skills.api.resource.Resource;
 import com.atherys.skills.api.skill.Castable;
 import com.atherys.skills.command.effect.EffectCommand;
 import com.atherys.skills.command.skill.SkillCommand;
@@ -14,7 +13,6 @@ import com.atherys.skills.facade.SkillFacade;
 import com.atherys.skills.facade.SkillMessagingFacade;
 import com.atherys.skills.listener.EntityListener;
 import com.atherys.skills.listener.ResourceListener;
-import com.atherys.skills.registry.ResourceRegistry;
 import com.atherys.skills.service.CooldownService;
 import com.atherys.skills.service.EffectService;
 import com.atherys.skills.service.ResourceService;
@@ -92,7 +90,6 @@ public class AtherysSkills {
     }
 
     private void construct() {
-        Sponge.getRegistry().registerModule(Resource.class, new ResourceRegistry());
     }
 
     @Listener(order = Order.EARLY)

@@ -1,7 +1,8 @@
 package com.atherys.skills.facade;
 
-import com.atherys.skills.api.event.ResourceRegenEvent;
-import com.atherys.skills.api.resource.Resource;
+import com.atherys.skills.AtherysSkillsConfig;
+import com.atherys.skills.api.event.ResourceEvent;
+import com.atherys.skills.api.resource.ResourceUser;
 import com.atherys.skills.resource.EntityResourceUser;
 import com.atherys.skills.service.ResourceService;
 import com.google.inject.Inject;
@@ -19,17 +20,20 @@ public class ResourceFacade {
     @Inject
     ResourceService resourceService;
 
-    public void onResourceRegen(ResourceRegenEvent event) {
+    @Inject
+    AtherysSkillsConfig config;
+
+    public void onResourceRegen(ResourceEvent.Regen event) {
 
         if (event.getRegenAmount() > 0 && event.getResourceUser() instanceof EntityResourceUser) {
             Optional<Player> player = Sponge.getServer().getPlayer(((EntityResourceUser) event.getResourceUser()).getId());
+            ResourceUser user = event.getResourceUser();
 
             player.ifPresent(p -> {
-                Resource resource = event.getResourceUser().getResource();
-                int amount = (int) (event.getRegenAmount() + resource.getCurrent());
-                amount = amount < resource.getMax() ? amount : (int) resource.getMax();
+                int amount = (int) (event.getRegenAmount() + user.getCurrent());
+                amount = amount < user.getMax() ? amount : (int) user.getMax();
 
-                Text display = Text.of(resource.getColor(), amount, "/", (int) resource.getMax(), " ", resource.getName());
+                Text display = Text.of(config.RESOURCE_COLOR, amount, "/", (int) user.getMax(), " ", config.RESOURCE_NAME);
                 p.sendTitle(Title.builder().actionBar(display).fadeOut(100).build());
             });
         }
