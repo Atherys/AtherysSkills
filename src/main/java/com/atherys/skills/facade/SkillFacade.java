@@ -12,8 +12,6 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageReceiver;
 
-import java.util.Optional;
-
 @Singleton
 public class SkillFacade {
 
@@ -23,28 +21,22 @@ public class SkillFacade {
     SkillFacade() {
     }
 
-    public void playerCastSkill(Player caster, String skillId, String... arguments) throws CastException {
-        livingCastSkill(caster, skillId, arguments);
+    public void playerCastSkill(Player caster, Castable skill, String... arguments) throws CastException {
+        livingCastSkill(caster, skill, arguments);
     }
 
-    public void livingCastSkill(Living caster, String skillId, String... arguments) throws CastException {
-        if (skillId == null || skillId.isEmpty()) {
-            throw CastErrors.exceptionOf("Must provide valid skill id.");
+    public void livingCastSkill(Living caster, Castable skill, String... arguments) throws CastException {
+        if (skill == null) {
+            throw CastErrors.exceptionOf("Must provide valid skill.");
         }
 
         if (arguments == null) {
             arguments = new String[0];
         }
 
-        Optional<Castable> castable = skillService.getSkillById(skillId);
-
-        if (!castable.isPresent()) {
-            throw CastErrors.noSuchSkill();
-        }
-
         CastResult castResult = skillService.castSkill(
                 caster,
-                castable.get(),
+                skill,
                 System.currentTimeMillis(),
                 arguments
         );

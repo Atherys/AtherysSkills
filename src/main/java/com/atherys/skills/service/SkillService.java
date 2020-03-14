@@ -151,4 +151,8 @@ public class SkillService {
 
         return true;
     }
+
+    public Map<String, Castable> getAllSkills() {
+        return skills;
+    }
 }
