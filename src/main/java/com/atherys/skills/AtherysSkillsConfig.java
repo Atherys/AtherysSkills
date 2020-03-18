@@ -46,5 +46,6 @@ public class AtherysSkillsConfig extends PluginConfig {
 
     protected AtherysSkillsConfig() throws IOException {
         super("config/" + AtherysSkills.ID, "config.conf");
+        init();
     }
 }

@@ -66,8 +66,6 @@ public class AtherysSkills {
         skillsInjector = spongeInjector.createChildInjector(new AtherysSkillsModule());
         skillsInjector.injectMembers(components);
 
-        getConfig().init();
-
         Sponge.getEventManager().registerListeners(this, components.entityListener);
         Sponge.getEventManager().registerListeners(this, components.resourceListener);
 
