@@ -2,10 +2,8 @@ package com.atherys.skills.service;
 
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.AtherysSkillsConfig;
-import com.atherys.skills.api.event.ResourceRegenEvent;
-import com.atherys.skills.api.resource.Resource;
+import com.atherys.skills.api.event.ResourceEvent;
 import com.atherys.skills.api.resource.ResourceUser;
-import com.atherys.skills.resource.ActionPoints;
 import com.atherys.skills.resource.EntityResourceUser;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -40,27 +38,25 @@ public class ResourceService {
 
     public void regenResources() {
         resourceUsers.forEach((uuid, user) -> {
-            Resource resource = user.getResource();
-
             // If the curent amount of resources is the same as the maximum, don't regen
-            if (resource.getCurrent() >= resource.getMax()) {
+            if (user.getCurrent() >= user.getMax()) {
                 return;
             }
 
-            double regenAmount = resource.getRegen();
+            double regenAmount = config.RESOURCE_REGEN_RATE;
 
-            if (resource.getMax() - resource.getCurrent() <= regenAmount) {
-                regenAmount = resource.getMax() - resource.getCurrent();
+            if (user.getMax() - user.getCurrent() <= regenAmount) {
+                regenAmount = user.getMax() - user.getCurrent();
             }
 
             // TODO: Make this work for all living entities, not just players
             Optional<Player> entity = Sponge.getServer().getPlayer(uuid);
 
-            ResourceRegenEvent event;
+            ResourceEvent.Regen event;
             if (entity.isPresent()) {
-                event = new ResourceRegenEvent(entity.get(), user, regenAmount);
+                event = new ResourceEvent.Regen(entity.get(), user, regenAmount);
             } else {
-                event = new ResourceRegenEvent(user, regenAmount);
+                event = new ResourceEvent.Regen(user, regenAmount);
             }
 
             Sponge.getEventManager().post(event);
@@ -69,7 +65,7 @@ public class ResourceService {
                 return;
             }
 
-            user.addResource(event.getRegenAmount());
+            user.fill(event.getRegenAmount());
         });
     }
 
@@ -77,16 +73,18 @@ public class ResourceService {
         ResourceUser resourceUser = resourceUsers.get(user.getUniqueId());
 
         if (resourceUser == null) {
-            resourceUser = new EntityResourceUser(user, new ActionPoints(config.RESOURCE_LIMIT));
+            resourceUser = new EntityResourceUser(user);
+            resourceUser.setMax(config.RESOURCE_LIMIT);
+            resourceUser.fill();
             resourceUsers.put(user.getUniqueId(), resourceUser);
+
+            Sponge.getEventManager().post(new ResourceEvent.Create(user, resourceUser));
         }
 
         return resourceUser;
     }
 
     public void withdrawResource(Living user, double amount) {
-        getOrCreateUser(user).removeResource(amount);
+        getOrCreateUser(user).drain(amount);
     }
-
-
 }

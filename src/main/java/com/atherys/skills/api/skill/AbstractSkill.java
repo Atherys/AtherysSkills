@@ -26,7 +26,7 @@ public abstract class AbstractSkill implements Castable {
 
     @Override
     public String getPermission() {
-        return null;
+        return "atherysskills.skills." + id;
     }
 
     @Override

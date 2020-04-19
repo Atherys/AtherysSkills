@@ -5,7 +5,6 @@ import com.atherys.skills.facade.ResourceFacade;
 import com.atherys.skills.facade.SkillFacade;
 import com.atherys.skills.listener.EntityListener;
 import com.atherys.skills.listener.ResourceListener;
-import com.atherys.skills.registry.ResourceRegistry;
 import com.atherys.skills.service.CooldownService;
 import com.atherys.skills.service.EffectService;
 import com.atherys.skills.service.ResourceService;
@@ -18,9 +17,6 @@ public class AtherysSkillsModule extends AbstractModule {
     protected void configure() {
         // Config
         bind(AtherysSkillsConfig.class);
-
-        // Registries
-        bind(ResourceRegistry.class).in(Scopes.SINGLETON);
 
         // Listeners
         bind(EntityListener.class).in(Scopes.SINGLETON);

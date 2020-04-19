@@ -1,7 +1,7 @@
 package com.atherys.skills.api.skill;
 
+import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.exception.CastException;
-import com.atherys.skills.api.resource.Resource;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
@@ -28,8 +28,12 @@ public final class CastErrors {
         return exceptionOf(TextColors.RED, "You are on global cooldown for another ", TextColors.WHITE, formatDuration(cooldownEnd - timestamp));
     }
 
-    public static CastException insufficientResources(Castable castable, Resource resource) {
-        return exceptionOf("You do not have enough ", resource.toText(), TextColors.RED, " to cast ", castable.getName());
+    public static CastException insufficientResources(Castable castable) {
+        return exceptionOf(
+                "You do not have enough ",
+                AtherysSkills.getInstance().getConfig().RESOURCE_COLOR, AtherysSkills.getInstance().getConfig().RESOURCE_NAME,
+                TextColors.RED, " to cast ", castable.getName()
+        );
     }
 
     public static CastException blocked(Castable castable) {

@@ -145,10 +145,14 @@ public class SkillService {
     private boolean validateResources(Living user, Castable castable) throws CastException {
         ResourceUser resourceUser = resourceService.getOrCreateUser(user);
 
-        if (resourceUser.getResource().getCurrent() < castable.getResourceCost(user)) {
-            throw CastErrors.insufficientResources(castable, resourceUser.getResource());
+        if (resourceUser.getCurrent() < castable.getResourceCost(user)) {
+            throw CastErrors.insufficientResources(castable);
         }
 
         return true;
+    }
+
+    public Map<String, Castable> getAllSkills() {
+        return skills;
     }
 }
