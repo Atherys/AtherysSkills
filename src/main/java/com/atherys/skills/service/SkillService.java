@@ -32,7 +32,7 @@ public class SkillService {
     }
 
     public void registerSkill(Castable castable) {
-        skills.put(castable.getId(), castable);
+        skills.put(castable.getName().toLowerCase(), castable);
         Sponge.getEventManager().registerListeners(AtherysSkills.getInstance(), castable);
     }
 
@@ -42,8 +42,8 @@ public class SkillService {
         }
     }
 
-    public Optional<Castable> getSkillById(String id) {
-        return Optional.ofNullable(skills.get(id));
+    public Optional<Castable> getSkillByName(String name) {
+        return Optional.ofNullable(skills.get(name));
     }
 
     /**

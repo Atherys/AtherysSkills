@@ -32,14 +32,14 @@ public class SkillCommandElement extends CommandElement {
             throw exception(skill, args);
         }
 
-        return AtherysSkills.getInstance().getSkillService().getSkillById(skill).orElseThrow(() -> exception(skill, args));
+        return AtherysSkills.getInstance().getSkillService().getSkillByName(skill.toLowerCase()).orElseThrow(() -> exception(skill, args));
     }
 
     @Override
     public List<String> complete(CommandSource src, CommandArgs args, CommandContext context) {
         return AtherysSkills.getInstance().getSkillService().getAllSkills().entrySet().stream()
                 .filter(entry -> src.hasPermission(entry.getValue().getPermission()))
-                .filter(entry -> args.nextIfPresent().map(arg -> entry.getKey().startsWith(arg)).orElse(true))
+                .filter(entry -> args.nextIfPresent().map(arg -> entry.getKey().startsWith(arg.toLowerCase())).orElse(true))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
