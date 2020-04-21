@@ -25,7 +25,7 @@ public class CastSkillCommand implements PlayerCommand, ParameterizedCommand {
     @Nonnull
     @Override
     public CommandResult execute(@Nonnull Player source, @Nonnull CommandContext args) throws CommandException {
-        Castable skill = args.<Castable>getOne("skill-id").get();
+        Castable skill = args.<Castable>getOne("skill-name").get();
         String[] arguments = args.<String>getOne("arguments...").orElse("").split(" ");
         AtherysSkills.getInstance().getSkillFacade().playerCastSkill(source, skill, arguments);
         return CommandResult.success();
@@ -34,7 +34,7 @@ public class CastSkillCommand implements PlayerCommand, ParameterizedCommand {
     @Override
     public CommandElement[] getArguments() {
         return new CommandElement[] {
-                new SkillCommandElement(Text.of("skill-id")),
+                new SkillCommandElement(Text.of("skill-name")),
                 GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("arguments...")))
         };
     }

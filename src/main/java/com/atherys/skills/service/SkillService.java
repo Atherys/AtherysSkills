@@ -32,6 +32,7 @@ public class SkillService {
     }
 
     public void registerSkill(Castable castable) {
+        skills.put(castable.getName().toLowerCase(), castable);
         skills.put(castable.getId(), castable);
         Sponge.getEventManager().registerListeners(AtherysSkills.getInstance(), castable);
     }
