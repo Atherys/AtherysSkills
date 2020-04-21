@@ -32,7 +32,7 @@ public class SkillCommandElement extends CommandElement {
             throw exception(skill, args);
         }
 
-        return AtherysSkills.getInstance().getSkillService().getSkillByName(skill.toLowerCase()).orElseThrow(() -> exception(skill, args));
+        return AtherysSkills.getInstance().getSkillService().getSkillById(skill.toLowerCase()).orElseThrow(() -> exception(skill, args));
     }
 
     @Override
