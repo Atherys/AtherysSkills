@@ -37,7 +37,7 @@ public interface TargetedCastable extends Castable {
             locations.add(blockRayHit.getBlockPosition());
         }
 
-        final Vector3d rotation = user.getRotation();
+        final Vector3d rotation = user.getHeadRotation();
         final Vector3d direction = Quaterniond.fromAxesAnglesDeg(rotation.getX(), -rotation.getY(), rotation.getZ()).getDirection();
 
         // default to location if eyes can't be found for some reason
