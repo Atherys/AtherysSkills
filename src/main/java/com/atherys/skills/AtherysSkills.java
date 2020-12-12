@@ -29,11 +29,12 @@ import org.spongepowered.api.event.game.GameRegistryEvent;
 import org.spongepowered.api.event.game.state.GameConstructionEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
+import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 
 import static com.atherys.skills.AtherysSkills.*;
 
-@Plugin(id = ID, name = NAME, description = DESCRIPTION, version = VERSION)
+@Plugin(id = ID, name = NAME, description = DESCRIPTION, version = VERSION, dependencies = {@Dependency(id = "atheryscore")})
 public class AtherysSkills {
 
     public static final String ID = "atherysskills";
