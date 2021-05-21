@@ -13,7 +13,7 @@ public class TemporaryPotionEffect extends TemporaryEffect {
     private PotionEffect effect;
 
     public TemporaryPotionEffect(String id, String name, PotionEffect effect, boolean isPositive) {
-        super(id, name, effect.getDuration(), isPositive);
+        super(id, name, effect.getDuration() * 50L, isPositive);
         this.effect = effect;
     }
 

@@ -17,7 +17,7 @@ public class LivingUtils {
 
     public static DataTransactionResult removePotionEffect(Living living, PotionEffect effect) {
         PotionEffectData effects = living.getOrCreate(PotionEffectData.class).get();
-        effects.remove(effect);
+        effects.removeAll(listEffect -> listEffect.getType() == effect.getType());
         return living.offer(effects);
     }
 

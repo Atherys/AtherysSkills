@@ -12,7 +12,8 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 @Aliases("effect")
 @Children({
         ApplyEffectCommand.class,
-        RemoveEffectCommand.class
+        RemoveEffectCommand.class,
+        RemoveNegativeEffectsCommand.class
 })
 @Permission("atherysskills.effect.base")
 public class EffectCommand implements CommandExecutor {
