@@ -28,6 +28,7 @@ import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.game.GameRegistryEvent;
 import org.spongepowered.api.event.game.state.GameConstructionEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
+import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
@@ -59,7 +60,8 @@ public class AtherysSkills {
 
     private Components components;
 
-    private void init() {
+    @Listener(order = Order.EARLY)
+    public void onPreInit(GamePreInitializationEvent event) {
         instance = this;
 
         components = new Components();
@@ -79,31 +81,16 @@ public class AtherysSkills {
         init = true;
     }
 
-    private void start() {
+    @Listener
+    public void onStart(GameStartedServerEvent event) {
+        if (!init) return;
+
         try {
             AtherysCore.getCommandService().register(new SkillCommand(), this);
             AtherysCore.getCommandService().register(new EffectCommand(), this);
         } catch (CommandService.AnnotatedCommandException e) {
             e.printStackTrace();
         }
-    }
-
-    private void construct() {
-    }
-
-    @Listener(order = Order.EARLY)
-    public void onInit(GameInitializationEvent event) {
-        init();
-    }
-
-    @Listener
-    public void onPreInit(GameConstructionEvent event) {
-        construct();
-    }
-
-    @Listener
-    public void onStart(GameStartedServerEvent event) {
-        if (init) start();
     }
 
     @Listener
