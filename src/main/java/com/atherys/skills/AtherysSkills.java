@@ -72,18 +72,18 @@ public class AtherysSkills {
         Sponge.getEventManager().registerListeners(this, components.entityListener);
         Sponge.getEventManager().registerListeners(this, components.resourceListener);
 
-        Sponge.getEventManager().post(new EffectRegistrationEvent(components.effectService));
-        Sponge.getEventManager().post(new SkillRegistrationEvent(components.skillService));
-
-        components.skillService.registerSkill(new SimpleDamageSkill());
-        components.skillService.registerSkill(new SimpleDamageEffectSkill());
-
         init = true;
     }
 
     @Listener
     public void onStart(GameStartedServerEvent event) {
         if (!init) return;
+
+        Sponge.getEventManager().post(new EffectRegistrationEvent(components.effectService));
+        Sponge.getEventManager().post(new SkillRegistrationEvent(components.skillService));
+
+        components.skillService.registerSkill(new SimpleDamageSkill());
+        components.skillService.registerSkill(new SimpleDamageEffectSkill());
 
         try {
             AtherysCore.getCommandService().register(new SkillCommand(), this);
