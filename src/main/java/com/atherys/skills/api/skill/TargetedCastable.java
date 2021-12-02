@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 public interface TargetedCastable extends Castable {
     Predicate<BlockRayHit<World>> blockFilter = hit -> {
         BlockType type = hit.getExtent().getBlockType(hit.getBlockPosition());
-        return !AtherysSkills.getInstance().getConfig().PASSABLE_BLOCKS.contains(type);
+        return !AtherysSkills.getInstance().getConfig().PASSABLE_BLOCKS.contains(type.getId());
     };
 
     @Override

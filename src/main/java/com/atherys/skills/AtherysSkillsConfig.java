@@ -35,12 +35,12 @@ public class AtherysSkillsConfig extends PluginConfig {
     public TextColor RESOURCE_COLOR = TextColors.BLUE;
 
     @Setting("passable-blocks")
-    public Set<BlockType> PASSABLE_BLOCKS = new HashSet<>();
+    public Set<String> PASSABLE_BLOCKS = new HashSet<>();
 
     {
         PASSABLE_BLOCKS.addAll(Arrays.asList(
-                BlockTypes.AIR, BlockTypes.TALLGRASS, BlockTypes.SNOW_LAYER, BlockTypes.WATER, BlockTypes.FLOWING_WATER,
-                BlockTypes.GRASS, BlockTypes.WHEAT, BlockTypes.REEDS, BlockTypes.VINE, BlockTypes.DOUBLE_PLANT
+                BlockTypes.AIR.getId(), BlockTypes.TALLGRASS.getId(), BlockTypes.SNOW_LAYER.getId(), BlockTypes.WATER.getId(), BlockTypes.FLOWING_WATER.getId(),
+                BlockTypes.GRASS.getId(), BlockTypes.WHEAT.getId(), BlockTypes.REEDS.getId(), BlockTypes.VINE.getId(), BlockTypes.DOUBLE_PLANT.getId()
         ));
     }
 
